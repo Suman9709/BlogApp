@@ -2,7 +2,11 @@ import React from 'react'
 
 const Writer = () => {
   return (
-    <div>Writer</div>
+    <div>
+      <div className='writer'>
+
+      </div>
+    </div>
   )
 }
 

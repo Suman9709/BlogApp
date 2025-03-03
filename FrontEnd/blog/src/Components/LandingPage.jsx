@@ -11,7 +11,7 @@ const LandingPage = () => {
   }));
 
   return (
-    <div className="w-screen min-h-screen">
+    <div className="w-[100%] min-h-screen flex justify-center flex-col">
       <Navbar />
 
       <div className='flex w-full justify-center text-3xl font-semibold mt-10'>
@@ -25,7 +25,7 @@ const LandingPage = () => {
         </p>
       </div>
       <div className="w-full flex justify-center overflow-hidden">
-        <div className="grid grid-cols-2 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-3
+        <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4
                         justify-items-center gap-6 p-6">
           {blogs.map((blog, index) => (
             <Card key={index} {...blog} />

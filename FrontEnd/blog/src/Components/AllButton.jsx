@@ -1,11 +1,11 @@
 import React from 'react'
 import Button from '@mui/material/Button';
 
-const AllButton = ({variant, name}) => {
+const AllButton = ({variant, name, sx}) => {
   return (
     <div className='flex gap-2'>
-      <Button variant={variant}>{name}</Button>
-      {/* <Button variant="contained">SignUp</Button> */}
+      <Button variant={variant}  >{name}</Button>
+
     </div>
   )
 }

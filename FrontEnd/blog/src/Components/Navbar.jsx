@@ -30,7 +30,7 @@ const Navbar = () => {
               <span className="absolute left-0 bottom-0 w-0 h-[2px] bg-black transition-all duration-300 group-hover:w-full rounded-lg"></span>
             </li>
             <li className="relative group">
-              <a href="#About Us" className="hover:text-blue-600">About Us</a>
+              <a href="#About Us" className="hover:text-blue-600">Category</a>
               <span className="absolute left-0 bottom-0 w-0 h-[2px] bg-black transition-all duration-300 group-hover:w-full rounded-lg"></span>
             </li>
             <li className="relative group">
@@ -39,7 +39,7 @@ const Navbar = () => {
             </li>
           </ul>
           <AllButton variant="outline" name="Login" />
-          <AllButton variant="contained" name="SignUp" />
+          <AllButton variant="contained" name="SignUp"  />
         </div>
 
         <button className="md:hidden" onClick={() => setIsOpen(!isOpen)}>
