@@ -1,9 +1,25 @@
 import React, { useState } from 'react';
+import { useNavigate } from 'react-router-dom';
 import AllButton from './AllButton';
 
 const LoginPage = () => {
   const [username, setUsername] = useState('');
   const [password, setPassword] = useState('');
+  const navigate = useNavigate();
+
+  const handleLogin = (e) => {
+    e.preventDefault();
+    const storeUser = JSON.parse(localStorage.getItem('user'));
+
+    if (storeUser && storeUser.username === username && storeUser.password === password) {
+      localStorage.setItem("isAuthenticated", "true")
+      alert("Login successfull")
+      navigate("/writer")
+    }
+    else {
+      alert("Invalid username or password");
+    }
+  }
 
   return (
     <div className="min-h-screen flex items-center justify-center bg-gray-100">
@@ -11,7 +27,7 @@ const LoginPage = () => {
         <h2 className="text-2xl font-bold text-center text-gray-900">
           Login To BlogApp
         </h2>
-        <form className="mt-6 space-y-6">
+        <form onSubmit={handleLogin} className="mt-6 space-y-6">
           <div>
             <label htmlFor="username" className="block text-sm font-medium text-gray-700">
               Username:
@@ -42,12 +58,12 @@ const LoginPage = () => {
           </div>
 
           <div className="flex justify-center">
-            <AllButton variant="contained" name="Login" />
+            <AllButton variant="contained" name="Login" onClick={handleLogin}/>
           </div>
         </form>
         <div className='flex w-full  items-center justify-center mt-4'>
           <p>Don't have an account?
-            <a href="#"> SignUp</a>
+            <a href="/signup"> SignUp</a>
           </p>
         </div>
       </div>

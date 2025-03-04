@@ -1,10 +1,25 @@
 import React, { useState } from 'react';
 import AllButton from './AllButton';
+import { useNavigate } from 'react-router-dom';
 
 const SignUpPage = () => {
   const [name, setName] = useState('');
   const [username, setUsername] = useState('');
   const [password, setPassword] = useState('');
+  const navigate = useNavigate();
+
+  const handleSubmit = (e) => {
+    e.preventDefault();
+    const user = { name, username, password }
+    if (!name || !username || !password) {
+      alert("please enter the credential")
+      return
+    }
+    localStorage.setItem('user', JSON.stringify(user))
+    alert('SignUp successfully, you can login now')
+    navigate("/login")
+  }
+
 
   return (
     <div className="min-h-screen flex items-center justify-center bg-gray-100">
@@ -13,7 +28,7 @@ const SignUpPage = () => {
           Sign Up
         </h2>
 
-        <form className="mt-6 space-y-6">
+        <form onSubmit={handleSubmit} className="mt-6 space-y-6" >
 
           <div>
             <label htmlFor="name" className="block text-2xl font-medium text-gray-700">
@@ -56,11 +71,11 @@ const SignUpPage = () => {
           </div>
 
           <div className='flex justify-center'>
-            <AllButton variant='contained' name='SignUp' />
+            <AllButton variant='contained' name='SignUp'onClick={handleSubmit} />
           </div>
         </form>
         <div className='flex w-full  items-center justify-center mt-4'>
-          <p>Already have an account <a href="#"> Login</a></p>
+          <p>Already have an account <a href="/login"> Login</a></p>
         </div>
       </div>
     </div>
