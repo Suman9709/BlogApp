@@ -49,16 +49,20 @@ const Navbar = () => {
           <ul className="flex gap-4">
             <li className="relative group">
               <a href="#Blog" className="hover:text-blue-600">Blog</a>
+              <span className="absolute left-0 bottom-0 w-0 h-[2px] bg-black transition-all duration-300 group-hover:w-full rounded-lg"></span>
             </li>
             <li className="relative group">
               <a href="#Category" className="hover:text-blue-600">Category</a>
+              <span className="absolute left-0 bottom-0 w-0 h-[2px] bg-black transition-all duration-300 group-hover:w-full rounded-lg"></span>
             </li>
             <li className="relative group">
               {isAuthenticated ? (
                 <a href="/writer" className="hover:text-blue-600">Create Blog</a>
+                
               ) : (
                 <a href="#ContactUs" className="hover:text-blue-600">Contact Us</a>
               )}
+               <span className="absolute left-0 bottom-0 w-0 h-[2px] bg-black transition-all duration-300 group-hover:w-full rounded-lg"></span>
             </li>
           </ul>
 
