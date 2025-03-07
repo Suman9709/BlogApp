@@ -97,11 +97,12 @@ const navigate = useNavigate();
             rows='4'
             placeholder='Write your blog content...'
           />
-          <label htmlFor="author">Author</label>
+          <label htmlFor="author">Author: </label>
           <input type="text"
             id='auhtor'
             value={author}
             onChange={(e) => setAuthor(e.target.value)}
+            className='border-1 rounded-lg p-1 m-2'
           />
         </div>
 

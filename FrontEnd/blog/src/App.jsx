@@ -4,6 +4,7 @@ import LandingPage from './Components/LandingPage';
 import LoginPage from './Components/LoginPage';
 import SignUpPage from './Components/SignUpPage';
 import Writer from './Components/Writer';
+import OwnerPage from './Components/OwnerPage';
 
 const App = () => {
   return (
@@ -13,6 +14,7 @@ const App = () => {
         <Route path="/login" element={<LoginPage />} />
         <Route path="/signup" element={<SignUpPage />} />
         <Route path="/writer" element={<Writer />} />
+        <Route path="/ownerpage" element={<OwnerPage />} />
       </Routes>
     </Router>
   );

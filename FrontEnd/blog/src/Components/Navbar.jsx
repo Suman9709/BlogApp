@@ -3,16 +3,17 @@ import SearchIcon from '@mui/icons-material/Search';
 import MenuIcon from '@mui/icons-material/Menu';
 import CloseIcon from '@mui/icons-material/Close';
 import AllButton from './AllButton';
-import { useNavigate } from 'react-router-dom';
+import { useNavigate, Link } from 'react-router-dom';
+import logo from '../Components/ImgAssets/logo1.png'
 
 const Navbar = () => {
   const [isOpen, setIsOpen] = useState(false);
   const [user, setUser] = useState(null);
   const [isAuthenticated, setIsAuthenticated] = useState(false);
+  const [isDropdownOpen, setIsDropdownOpen] = useState(false)
   const navigate = useNavigate();
 
   useEffect(() => {
-    // Get user and authentication status
     const storedUser = JSON.parse(localStorage.getItem("user"));
     const authStatus = localStorage.getItem("isAuthenticated") === "true";
 
@@ -28,14 +29,13 @@ const Navbar = () => {
   };
 
   return (
-    <nav className="bg-white shadow-md">
+    <nav className="bg-white shadow-md fixed z-10 top-0 w-full">
       <div className="flex items-center justify-between p-4 max-w-7xl mx-auto">
         <div>
-          <img src="" alt="Logo" className="h-10 w-auto" />
+          <img src={logo} alt="Logo" className="h-10 w-auto" />
         </div>
 
-        {/* Search Bar */}
-        <div className="flex items-center border border-gray-400 rounded-4xl p-2 bg-white w-full max-w-xs sm:max-w-sm md:max-w-md lg:max-w-lg">
+        <div className="flex items-center border border-gray-400 rounded-4xl p-2 bg-white w-full max-w-48 sm:max-w-sm md:max-w-sm lg:max-w-lg">
           <input
             type="text"
             placeholder="What you are looking for..."
@@ -44,76 +44,96 @@ const Navbar = () => {
           <SearchIcon className="text-gray-500 cursor-pointer" />
         </div>
 
-        {/* Navbar Links & Auth Buttons */}
         <div className="hidden md:flex items-center justify-center gap-4">
-          <ul className="flex gap-4">
+          <ul className="flex gap-6">
             <li className="relative group">
-              <a href="#Blog" className="hover:text-blue-600">Blog</a>
+              <Link to='/' className="hover:text-blue-600">Blog</Link>
               <span className="absolute left-0 bottom-0 w-0 h-[2px] bg-black transition-all duration-300 group-hover:w-full rounded-lg"></span>
             </li>
             <li className="relative group">
-              <a href="#Category" className="hover:text-blue-600">Category</a>
+              <Link to="/Category" className="hover:text-blue-600">Category</Link>
               <span className="absolute left-0 bottom-0 w-0 h-[2px] bg-black transition-all duration-300 group-hover:w-full rounded-lg"></span>
             </li>
             <li className="relative group">
               {isAuthenticated ? (
-                <a href="/writer" className="hover:text-blue-600">Create Blog</a>
-                
+                <Link to="/writer" className="hover:text-blue-600">Create Blog</Link>
+
               ) : (
-                <a href="#ContactUs" className="hover:text-blue-600">Contact Us</a>
+                <Link to="/ContactUs" className="hover:text-blue-600">Contact Us</Link>
               )}
-               <span className="absolute left-0 bottom-0 w-0 h-[2px] bg-black transition-all duration-300 group-hover:w-full rounded-lg"></span>
+              <span className="absolute left-0 bottom-0 w-0 h-[2px] bg-black transition-all duration-300 group-hover:w-full rounded-lg"></span>
             </li>
           </ul>
 
-          {/* Authentication Buttons */}
-          <div className="flex items-center gap-4">
-            {isAuthenticated ? (
-              <>
-                {/* Show Profile Icon (First Letter) */}
-                <div className="w-10 h-10 flex items-center justify-center bg-blue-500 text-white rounded-full text-lg font-bold">
-                  {user?.name.charAt(0).toUpperCase()}
+
+        </div>
+        <div className="flex items-center gap-4 relative">
+          {isAuthenticated ? (
+            <>
+              <div
+                className="w-10 h-10 flex items-center justify-center bg-blue-500 text-white rounded-full text-lg font-bold cursor-pointer "
+                onClick={() => setIsDropdownOpen(!isDropdownOpen)}
+              >
+                {user?.name.charAt(0).toUpperCase()}
+              </div>
+
+              {isDropdownOpen && (
+                <div className="absolute top-8 right-0 mt-2 w-32 bg-white border border-gray-200 shadow-lg rounded-md">
+                  <ul className="flex flex-col">
+                    <li className="px-4 py-2 hover:bg-gray-100 cursor-pointer" onClick={() => navigate("/ownerpage")}>
+                      My Profile
+                    </li>
+                    <li className="px-4 py-2 hover:bg-gray-100 cursor-pointer" onClick={handleLogout}>
+                      Logout
+                    </li>
+                  </ul>
                 </div>
-                <AllButton variant="outlined" name="Logout" onClick={handleLogout} />
-              </>
-            ) : (
-              <>
-                <AllButton variant="outlined" name="Login" onClick={() => navigate("/login")} />
-                <AllButton variant="contained" name="Signup" onClick={() => navigate("/signup")} />
-              </>
-            )}
-          </div>
+              )}
+            </>
+          ) : (
+            <>
+              <AllButton variant="outlined" name="Login" onClick={() => navigate("/login")} />
+              <AllButton variant="contained" name="Signup" onClick={() => navigate("/signup")} />
+            </>
+          )}
         </div>
 
-        {/* Mobile Menu Toggle */}
+        {/* toggle button  */}
         <button className="md:hidden" onClick={() => setIsOpen(!isOpen)}>
           {isOpen ? <CloseIcon className="text-2xl" /> : <MenuIcon className="text-2xl" />}
         </button>
       </div>
-
-      {/* Mobile Menu */}
+      {/* mobile view */}
       {isOpen && (
         <div className="md:hidden bg-white shadow-md p-4 flex flex-col items-center">
           <ul className="flex flex-col gap-4 text-center">
-            <li><a href="#Blog" className="hover:text-blue-600">Blog</a></li>
-            <li><a href="#Category" className="hover:text-blue-600">Category</a></li>
+            <li><Link to="/Blog" className="hover:text-blue-600">Blog</Link></li>
+            <li><Link to="/Category" className="hover:text-blue-600">Category</Link></li>
             <li>
               {isAuthenticated ? (
-                <a href="/writer" className="hover:text-blue-600">Create Blog</a>
+                <Link to="/writer" className="hover:text-blue-600">Create Blog</Link>
               ) : (
-                <a href="#ContactUs" className="hover:text-blue-600">Contact Us</a>
+                <Link to="#ContactUs" className="hover:text-blue-600">Contact Us</Link>
               )}
             </li>
           </ul>
 
-          {/* Authentication Buttons for Mobile */}
+
           <div className="flex flex-col gap-2 mt-4 w-full justify-center items-center">
             {isAuthenticated ? (
               <>
-                <div className="w-10 h-10 flex items-center justify-center bg-blue-500 text-white rounded-full text-lg font-bold">
-                  {user?.name.charAt(0).toUpperCase()}
-                </div>
-                <AllButton variant="outlined" name="Logout" onClick={handleLogout} />
+                {isDropdownOpen && (
+                  <div className="bg-white border border-gray-200 shadow-md rounded-md mt-2 w-48">
+                    <ul className="flex flex-col">
+                      <li className="px-4 py-2 hover:bg-gray-100 cursor-pointer" onClick={() => navigate("/profile")}>
+                        My Profile
+                      </li>
+                      <li className="px-4 py-2 hover:bg-gray-100 cursor-pointer" onClick={handleLogout}>
+                        Logout
+                      </li>
+                    </ul>
+                  </div>
+                )}
               </>
             ) : (
               <>

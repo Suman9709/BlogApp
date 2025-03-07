@@ -14,7 +14,7 @@ const LoginPage = () => {
     if (storeUser && storeUser.username === username && storeUser.password === password) {
       localStorage.setItem("isAuthenticated", "true")
       alert("Login successfull")
-      navigate("/writer")
+      navigate("/")
     }
     else {
       alert("Invalid username or password");
