@@ -1,7 +1,7 @@
 import Blog from '../Model/BlogModel.js'
 
 
-export const  createBlog = async (req, res) => {
+export const createBlog = async (req, res) => {
     try {
 
         const { title, description, author, blogLike } = req.body
@@ -11,14 +11,15 @@ export const  createBlog = async (req, res) => {
                     message: "Image is required"
                 });
         }
-
-        const imagePath = `/uploads/${req.file.filename}`;
+        // Get image URL from Cloudinary
+        const imageUrl = req.file.path
+        // const imagePath = `/uploads/${req.file.filename}`; //this is used for local storage
         const newBlog = new Blog({
             title,
             description,
             author,
-            blogLike,
-            image: imagePath,
+            blogLike:0,
+            image: imageUrl,
         })
 
         await newBlog.save();
@@ -28,7 +29,7 @@ export const  createBlog = async (req, res) => {
                 blog: newBlog
             })
 
-    } 
+    }
     catch (error) {
 
         res.status(500).json({ message: 'Error creating blog', error });
