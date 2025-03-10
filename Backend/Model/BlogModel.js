@@ -3,8 +3,8 @@ import mongoose, { Schema } from "mongoose";
 const blogSchema = new Schema({
 
     image: {
-        data: Buffer,
-        contentType: String 
+        type: String, 
+        required: true,
     },
 
     title: {
@@ -25,7 +25,7 @@ const blogSchema = new Schema({
     },
 
 
-})
+}, { timestamps: true })
 
 const Blog = mongoose.model("Blog", blogSchema)
 

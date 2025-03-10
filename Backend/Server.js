@@ -16,8 +16,13 @@ connectDB()
 
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
+
+app.use(express.json())
+app.use(express.urlencoded({ extended: true }));
 app.use('/uploads', express.static(path.join(__dirname, 'uploads')));
 
+
+app.use('/api/blogs', BlogRoutes)
 app.listen(PORT, () => {
     console.log(`Server is running on port ${PORT}`);
 });
