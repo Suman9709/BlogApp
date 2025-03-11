@@ -1,4 +1,5 @@
 import User from '../Model/UserSchema.js'
+import jwt from 'jsonwebtoken'
 
 //register user
 export const registerUser = async (req, res) => {
@@ -53,7 +54,7 @@ export const loginUser = async (req, res) => {
 
         const { username, password } = req.body
 
-        if (!username, !password) {
+        if (!username || !password) {
             res.status(401).json({ message: "Please enter username and password" })
         }
 
@@ -89,4 +90,46 @@ export const loginUser = async (req, res) => {
         res.status(500).json({ message: "Login failed", error });
     }
 }
+
+//logout
+export const logout = async (req, res) => {
+    try {
+        const authHeader = req.headers["authorization"];
+        if (!authHeader || !authHeader.startsWith("Bearer ")) {
+            return res.status(403).json({ message: "Access Denied: No Token Provided" });
+        }
+
+        const token = authHeader.split(" ")[1];
+
+        if (!token) {
+            return res.status(403).json({ message: "Access Denied: No Token Provided" });
+        }
+        const decoded = jwt.verify(token, process.env.JWT_ACCESS_TOKEN_SECRET);
+
+        // const user = await User.findById(decoded._id);
+        // if (!user) {
+        //     return res.status(404).json({ message: "User not found" });
+        // }
+        // user.refreshToken = null;
+        // await user.save();
+
+        // res.status(200).json({ message: "Logged out successfully" });
+
+        const user = await User.findById(decoded._id);
+
+        if (!user) {
+            return res.status(404).json({ message: "user not found" });
+        }
+
+        user.refreshToken = null;
+        await user.save();
+
+        res.status(200).json({ message: "Loggedout successfully" })
+    } catch (error) {
+        console.error("Logout error:", error);
+        res.status(401).json({ message: "Invalid or expired token", error });
+    }
+};
+
+
 
