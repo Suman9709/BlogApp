@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import AllButton from './AllButton';
 import { useNavigate } from 'react-router-dom';
+import axios from 'axios';
 
 const Writer = () => {
   const [title, setTitle] = useState('');
@@ -8,7 +9,15 @@ const Writer = () => {
   const [image, setImage] = useState(null);
   const [preview, setPreview] = useState('');
   const [author, setAuthor] = useState('');
-const navigate = useNavigate();
+  const navigate = useNavigate();
+
+  useEffect(() => {
+    const token = localStorage.getItem("token");
+    if (!token) {
+      navigate("/login");
+    }
+  }, [navigate]);
+
   const handleImageUpload = (e) => {
     const file = e.target.files[0];
     if (file) {
@@ -16,36 +25,48 @@ const navigate = useNavigate();
       setPreview(URL.createObjectURL(file));
     }
   };
-  const handleUplaod = () => {
-    if (!title || !description || !author) {
-      alert("Fill all fields");
+
+  const handleUpload = async () => {
+
+    if (!title || !description || !author || !image) {
+      alert("Fill all fields and upload an image");
       return;
     }
 
-    const newBlog = {
-      title,
-      description,
-      author,
-      image: preview || "",
-    };
-  
-    // Fetch existing blogs from localStorage
-    const existingBlogs = JSON.parse(localStorage.getItem("blogs")) || [];
-  
-    // Append new blog to the array
-    const updatedBlogs = [...existingBlogs, newBlog];
-  
-    // Save the updated list back to localStorage
-    localStorage.setItem("blogs", JSON.stringify(updatedBlogs));
-  
-    alert("Blog uploaded successfully");
-    console.log("Updated blog data:", updatedBlogs);
-    navigate("/");
+    // Create FormData and append fields
+    const formData = new FormData();
+    formData.append('title', title);
+    formData.append('description', description);
+    formData.append('author', author);
+    formData.append('image', image);
+
+    const token = localStorage.getItem("token");
+    if (!token) {
+      alert("User not authenticated. Please log in.");
+      navigate("/login");
+      return;
+    }
+
+    try {
+      const response = await axios.post("http://localhost:5000/api/blogs/createblog", formData, {
+        headers: {
+
+          "Authorization": `Bearer ${token}`, 
+        },
+      });
+
+      if (response.status === 201) {
+        alert("Blog Uploaded successfully");
+        navigate("/");
+      }
+    } catch (error) {
+      console.error('Error uploading blog:', error.response?.data || error.message);
+      alert('Failed to upload blog');
+    }
   };
+
   return (
     <div className='flex w-screen h-screen justify-center items-center bg-gray-100 px-4'>
-
-
       <div className='bg-white p-6 rounded-lg shadow-lg w-full max-w-lg'>
         <h2 className='text-cyan-600 text-3xl font-semibold text-center'>
           Write Your Blog Post
@@ -98,16 +119,16 @@ const navigate = useNavigate();
             placeholder='Write your blog content...'
           />
           <label htmlFor="author">Author: </label>
-          <input type="text"
-            id='auhtor'
+          <input
+            type="text"
+            id='author'
             value={author}
             onChange={(e) => setAuthor(e.target.value)}
             className='border-1 rounded-lg p-1 m-2'
           />
         </div>
 
-        <AllButton variant="contained" name="Upload" onClick={handleUplaod} />
-
+        <AllButton variant="contained" name="Upload" onClick={handleUpload} />
       </div>
     </div>
   );

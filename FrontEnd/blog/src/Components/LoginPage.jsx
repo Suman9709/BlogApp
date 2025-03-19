@@ -1,25 +1,46 @@
-import React, { useState } from 'react';
-import { useNavigate } from 'react-router-dom';
+import React, { useEffect, useState } from 'react';
+import { Link, useNavigate } from 'react-router-dom';
+import axios from 'axios';
 import AllButton from './AllButton';
 
 const LoginPage = () => {
   const [username, setUsername] = useState('');
   const [password, setPassword] = useState('');
+  const [error, setError] = useState('');
   const navigate = useNavigate();
 
-  const handleLogin = (e) => {
+  const handleLogin = async (e) => {
     e.preventDefault();
-    const storeUser = JSON.parse(localStorage.getItem('user'));
+    // const storeUser = JSON.parse(localStorage.getItem('user'));
 
-    if (storeUser && storeUser.username === username && storeUser.password === password) {
+    // if (storeUser && storeUser.username === username && storeUser.password === password) {
+    //   localStorage.setItem("isAuthenticated", "true")
+    //   alert("Login successfull")
+    //   navigate("/")
+    // }
+    // else {
+    //   alert("Invalid username or password");
+    // }
+
+    setError(" ")
+    try {
+      const response = await axios.post("http://localhost:5000/api/blogs/login", {
+        username, password
+      });
+      const { token, user } = response.data;
+      localStorage.setItem('token', token);
+
+      localStorage.getItem('user', JSON.stringify(user))
       localStorage.setItem("isAuthenticated", "true")
-      alert("Login successfull")
-      navigate("/")
-    }
-    else {
-      alert("Invalid username or password");
+      alert("Login successful");
+      navigate('/');
+
+    } catch (error) {
+      console.error('Login error', error.response?.data?.message)
+      setError(error.response?.data?.message || 'Login failed');
     }
   }
+
 
   return (
     <div className="min-h-screen flex items-center justify-center bg-gray-100">
@@ -58,12 +79,12 @@ const LoginPage = () => {
           </div>
 
           <div className="flex justify-center">
-            <AllButton variant="contained" name="Login" onClick={handleLogin}/>
+            <AllButton variant="contained" name="Login" onClick={handleLogin} />
           </div>
         </form>
         <div className='flex w-full  items-center justify-center mt-4'>
           <p>Don't have an account?
-            <a href="/signup"> SignUp</a>
+            <Link to="/signup"> SignUp</Link>
           </p>
         </div>
       </div>

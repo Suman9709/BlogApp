@@ -1,19 +1,20 @@
-import React, { useEffect, useState } from 'react';
-import SearchIcon from '@mui/icons-material/Search';
-import MenuIcon from '@mui/icons-material/Menu';
-import CloseIcon from '@mui/icons-material/Close';
-import AllButton from './AllButton';
-import { useNavigate, Link } from 'react-router-dom';
-import logo from '../Components/ImgAssets/logo1.png'
+import React, { useEffect, useState } from "react";
+import SearchIcon from "@mui/icons-material/Search";
+import MenuIcon from "@mui/icons-material/Menu";
+import CloseIcon from "@mui/icons-material/Close";
+import AllButton from "./AllButton";
+import { useNavigate, Link } from "react-router-dom";
+import logo from "../Components/ImgAssets/logo1.png";
 
 const Navbar = () => {
   const [isOpen, setIsOpen] = useState(false);
   const [user, setUser] = useState(null);
   const [isAuthenticated, setIsAuthenticated] = useState(false);
-  const [isDropdownOpen, setIsDropdownOpen] = useState(false)
+  const [isDropdownOpen, setIsDropdownOpen] = useState(false);
   const navigate = useNavigate();
 
   useEffect(() => {
+    // Load authentication status and user details from localStorage
     const storedUser = JSON.parse(localStorage.getItem("user"));
     const authStatus = localStorage.getItem("isAuthenticated") === "true";
 
@@ -21,11 +22,49 @@ const Navbar = () => {
     setIsAuthenticated(authStatus);
   }, []);
 
-  const handleLogout = () => {
-    localStorage.setItem("isAuthenticated", "false");
-    setIsAuthenticated(false);
-    alert("Logout successful");
-    navigate("/");
+  const handleLogout = async () => {
+    if (!isAuthenticated) {
+      alert("You are already logged out!");
+      return;
+    }
+
+    try {
+      const token = localStorage.getItem("token");
+
+      if (!token) {
+        alert("You are not authenticated!");
+        return;
+      }
+
+      const response = await fetch("http://localhost:5000/api/blogs/logout", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+          Authorization: `Bearer ${token}`,
+        },
+      });
+
+      const data = await response.json();
+
+      if (response.ok) {
+        // Clear stored user data
+        localStorage.removeItem("token");
+        localStorage.removeItem("user");
+        localStorage.setItem("isAuthenticated", "false");
+
+        setUser(null);
+        setIsAuthenticated(false);
+        setIsDropdownOpen(false);
+
+        alert("Logout successful");
+        navigate("/");
+      } else {
+        alert(data.message || "Logout failed. Please try again.");
+      }
+    } catch (error) {
+      console.error("Logout Error:", error);
+      alert("An error occurred. Please try again.");
+    }
   };
 
   return (
@@ -47,7 +86,7 @@ const Navbar = () => {
         <div className="hidden md:flex items-center justify-center gap-4">
           <ul className="flex gap-6">
             <li className="relative group">
-              <Link to='/' className="hover:text-blue-600">Blog</Link>
+              <Link to="/" className="hover:text-blue-600">Blog</Link>
               <span className="absolute left-0 bottom-0 w-0 h-[2px] bg-black transition-all duration-300 group-hover:w-full rounded-lg"></span>
             </li>
             <li className="relative group">
@@ -57,21 +96,19 @@ const Navbar = () => {
             <li className="relative group">
               {isAuthenticated ? (
                 <Link to="/writer" className="hover:text-blue-600">Create Blog</Link>
-
               ) : (
                 <Link to="/ContactUs" className="hover:text-blue-600">Contact Us</Link>
               )}
               <span className="absolute left-0 bottom-0 w-0 h-[2px] bg-black transition-all duration-300 group-hover:w-full rounded-lg"></span>
             </li>
           </ul>
-
-
         </div>
+
         <div className="flex items-center gap-4 relative">
           {isAuthenticated ? (
             <>
               <div
-                className="w-10 h-10 flex items-center justify-center bg-blue-500 text-white rounded-full text-lg font-bold cursor-pointer "
+                className="w-10 h-10 flex items-center justify-center bg-blue-500 text-white rounded-full text-lg font-bold cursor-pointer"
                 onClick={() => setIsDropdownOpen(!isDropdownOpen)}
               >
                 {user?.name.charAt(0).toUpperCase()}
@@ -103,6 +140,7 @@ const Navbar = () => {
           {isOpen ? <CloseIcon className="text-2xl" /> : <MenuIcon className="text-2xl" />}
         </button>
       </div>
+
       {/* mobile view */}
       {isOpen && (
         <div className="md:hidden bg-white shadow-md p-4 flex flex-col items-center">
@@ -113,11 +151,10 @@ const Navbar = () => {
               {isAuthenticated ? (
                 <Link to="/writer" className="hover:text-blue-600">Create Blog</Link>
               ) : (
-                <Link to="#ContactUs" className="hover:text-blue-600">Contact Us</Link>
+                <Link to="/ContactUs" className="hover:text-blue-600">Contact Us</Link>
               )}
             </li>
           </ul>
-
 
           <div className="flex flex-col gap-2 mt-4 w-full justify-center items-center">
             {isAuthenticated ? (

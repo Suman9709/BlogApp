@@ -1,6 +1,7 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import AllButton from './AllButton';
-import { useNavigate } from 'react-router-dom';
+import axios from 'axios'
+import { Link, useNavigate } from 'react-router-dom';
 
 const SignUpPage = () => {
   const [name, setName] = useState('');
@@ -8,18 +9,27 @@ const SignUpPage = () => {
   const [password, setPassword] = useState('');
   const navigate = useNavigate();
 
-  const handleSubmit = (e) => {
+  const handleSubmit = async(e) => {
     e.preventDefault();
     const user = { name, username, password }
-    if (!name || !username || !password) {
+    if (!user) {
       alert("please enter the credential")
       return
     }
-    localStorage.setItem('user', JSON.stringify(user))
-    alert('SignUp successfully, you can login now')
-    navigate("/login")
-  }
+    // localStorage.setItem('user', JSON.stringify(user))
+    // alert('SignUp successfully, you can login now')
+    // navigate("/login")
 
+    try {
+      const response = await axios.post('http://localhost:5000/api/blogs/register', {
+        name, username, password
+      });
+      alert(response.data.message)
+      navigate("/login")
+    } catch (error) {
+      alert(error.response?.data?.message || 'SignUp Failed')
+    }
+  }
 
   return (
     <div className="min-h-screen flex items-center justify-center bg-gray-100">
@@ -75,7 +85,7 @@ const SignUpPage = () => {
           </div>
         </form>
         <div className='flex w-full  items-center justify-center mt-4'>
-          <p>Already have an account <a href="/login"> Login</a></p>
+          <p>Already have an account <Link to="/login"> Login</Link></p>
         </div>
       </div>
     </div>

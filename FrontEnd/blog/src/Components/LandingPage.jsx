@@ -1,18 +1,32 @@
 import React, { useEffect, useState } from 'react';
 import Navbar from './Navbar';
 import Card from './Card';
+import axios from 'axios';
 
 const LandingPage = () => {
 
   const [blogs, setBlog] = useState([])
   useEffect(() => {
 
-    const storeBlog = JSON.parse(localStorage.getItem("blogs")) || []
-    console.log("Fetched blogs from storage:", storeBlog);
-    if (storeBlog.length > 0) {
+    // const storeBlog = JSON.parse(localStorage.getItem("blogs")) || []
+    // console.log("Fetched blogs from storage:", storeBlog);
+    // if (storeBlog.length > 0) {
 
-      setBlog(storeBlog)
+    //   setBlog(storeBlog)
+    // }
+
+
+    const fetchBlogs = async ()=>{
+      try {
+        const response = await axios.get("http://localhost:5000/api/blogs/allblogs");
+        console.log(response.data);
+        setBlog(response.data);
+        
+      } catch (error) {
+        console.error("Error fetching blogs", error.response?.data || error.message);
+      }
     }
+    fetchBlogs();
   }, [])
 
   return (
