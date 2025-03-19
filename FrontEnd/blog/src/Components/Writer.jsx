@@ -1,5 +1,4 @@
 import React, { useState, useEffect } from 'react';
-import AllButton from './AllButton';
 import { useNavigate } from 'react-router-dom';
 import axios from 'axios';
 
@@ -27,7 +26,6 @@ const Writer = () => {
   };
 
   const handleUpload = async () => {
-
     if (!title || !description || !author || !image) {
       alert("Fill all fields and upload an image");
       return;
@@ -50,8 +48,7 @@ const Writer = () => {
     try {
       const response = await axios.post("http://localhost:5000/api/blogs/createblog", formData, {
         headers: {
-
-          "Authorization": `Bearer ${token}`, 
+          "Authorization": `Bearer ${token}`,
         },
       });
 
@@ -118,17 +115,26 @@ const Writer = () => {
             rows='4'
             placeholder='Write your blog content...'
           />
-          <label htmlFor="author">Author: </label>
+        </div>
+
+        <div className='mt-4'>
+          <label htmlFor="author" className='block text-gray-700 font-medium'>Author</label>
           <input
             type="text"
             id='author'
             value={author}
             onChange={(e) => setAuthor(e.target.value)}
-            className='border-1 rounded-lg p-1 m-2'
+            className='w-full p-2 border rounded-lg shadow-sm focus:ring-cyan-500 focus:border-cyan-500'
+            placeholder='Enter your name...'
           />
         </div>
 
-        <AllButton variant="contained" name="Upload" onClick={handleUpload} />
+        <button
+          onClick={handleUpload}
+          className='w-full mt-4 bg-cyan-600 text-white py-2 px-4 rounded-lg hover:bg-cyan-700 transition duration-300'
+        >
+          Upload Blog
+        </button>
       </div>
     </div>
   );
