@@ -106,15 +106,6 @@ export const logout = async (req, res) => {
         }
         const decoded = jwt.verify(token, process.env.JWT_ACCESS_TOKEN_SECRET);
 
-        // const user = await User.findById(decoded._id);
-        // if (!user) {
-        //     return res.status(404).json({ message: "User not found" });
-        // }
-        // user.refreshToken = null;
-        // await user.save();
-
-        // res.status(200).json({ message: "Logged out successfully" });
-
         const user = await User.findById(decoded._id);
 
         if (!user) {

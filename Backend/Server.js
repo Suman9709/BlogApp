@@ -1,6 +1,7 @@
 import express from 'express';
 // import 'dotenv/config'; // this can also be used
 import dotenv from 'dotenv';
+import cors from 'cors';
 // import { v2 as cloudinary } from 'cloudinary';
 // import path from 'path';
 import connectDB from './Config/db.js'
@@ -17,6 +18,12 @@ connectDB()
 
 // const __filename = fileURLToPath(import.meta.url);
 // const __dirname = path.dirname(__filename);
+
+app.use(cors({
+    origin: "http://localhost:5173",  // Allow frontend to access backend
+    methods: ["GET", "POST", "PUT", "DELETE"],
+    allowedHeaders: ["Content-Type", "Authorization"]
+}));
 
 app.use(express.json())
 app.use(express.urlencoded({ extended: true }));
