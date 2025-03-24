@@ -7,7 +7,7 @@ const Writer = () => {
   const [description, setDescription] = useState('');
   const [image, setImage] = useState(null);
   const [preview, setPreview] = useState('');
-  const [author, setAuthor] = useState('');
+  const [authorName, setAuthorName] = useState('');
   const navigate = useNavigate();
 
   useEffect(() => {
@@ -26,7 +26,7 @@ const Writer = () => {
   };
 
   const handleUpload = async () => {
-    if (!title || !description || !author || !image) {
+    if (!title || !description || !authorName || !image) {
       alert("Fill all fields and upload an image");
       return;
     }
@@ -35,7 +35,7 @@ const Writer = () => {
     const formData = new FormData();
     formData.append('title', title);
     formData.append('description', description);
-    formData.append('author', author);
+    formData.append('authorName', authorName);
     formData.append('image', image);
 
     const token = localStorage.getItem("token");
@@ -49,6 +49,7 @@ const Writer = () => {
       const response = await axios.post("http://localhost:5000/api/blogs/createblog", formData, {
         headers: {
           "Authorization": `Bearer ${token}`,
+          // "Content-Type": "multipart/form-data",
         },
       });
 
@@ -122,8 +123,8 @@ const Writer = () => {
           <input
             type="text"
             id='author'
-            value={author}
-            onChange={(e) => setAuthor(e.target.value)}
+            value={authorName}
+            onChange={(e) => setAuthorName(e.target.value)}
             className='w-full p-2 border rounded-lg shadow-sm focus:ring-cyan-500 focus:border-cyan-500'
             placeholder='Enter your name...'
           />

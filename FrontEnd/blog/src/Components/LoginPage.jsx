@@ -28,10 +28,9 @@ const LoginPage = () => {
         username, password
       });
       const { token, user } = response.data;
-      localStorage.setItem('token', token);
-
-      localStorage.getItem('user', JSON.stringify(user))
-      localStorage.setItem("isAuthenticated", "true")
+      localStorage.setItem("token", token); // ✅ Store token correctly
+      localStorage.setItem("user", JSON.stringify(user)); // ✅ Store user info as string
+      localStorage.setItem("isAuthenticated", "true");
       alert("Login successful");
       navigate('/');
 
@@ -40,6 +39,49 @@ const LoginPage = () => {
       setError(error.response?.data?.message || 'Login failed');
     }
   }
+
+//   const handleLogin = async (e) => {
+//     e.preventDefault();
+//     setError("");
+
+//     try {
+//         const response = await axios.post("http://localhost:5000/api/blogs/login", {
+//             username,
+//             password
+//         });
+
+//         const { token, user } = response.data;
+
+//         if (token && user) {
+//             // Store token and user details in localStorage
+//             localStorage.setItem("token", token);
+//             localStorage.setItem("user", JSON.stringify(user));
+//             localStorage.setItem("isAuthenticated", "true");
+
+//             alert("Login successful");
+//             navigate('/');
+//         } else {
+//             throw new Error("Invalid login response");
+//         }
+
+//     } catch (error) {
+//         console.error('Login error:', error.response?.data?.message || error.message);
+//         setError(error.response?.data?.message || 'Login failed');
+//     }
+// };
+
+// Retrieving the token from localStorage when needed
+// const getToken = () => {
+//     return localStorage.getItem("token");
+// };
+
+// // Retrieving user data when needed
+// const getUser = () => {
+//     const user = localStorage.getItem("user");
+//     return user ? JSON.parse(user) : null;
+// };
+
+
 
 
   return (

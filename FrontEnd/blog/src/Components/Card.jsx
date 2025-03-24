@@ -4,7 +4,7 @@ import FavoriteBorderIcon from '@mui/icons-material/FavoriteBorder';
 import { useNavigate } from 'react-router-dom';
 import axios from 'axios';
 
-const Card = ({ title, description, image, author, blogId, user }) => {
+const Card = ({ title, description, image, authorName, blogId, user }) => {
   const [likes, setLikes] = useState(0)
   const [isLiked, setIsLiked] = useState(false)
   const navigate = useNavigate();
@@ -40,7 +40,7 @@ const Card = ({ title, description, image, author, blogId, user }) => {
         <p className="text-gray-600 text-sm line-clamp-3 mt-1">{description}</p>
 
         <div className="flex items-center justify-between text-gray-700 mt-auto">
-          <h3 className="font-medium text-sm">{author}</h3>
+          <h3 className="font-medium text-sm">{authorName}</h3>
           <div className="flex items-center gap-1" onClick={handleLikes}>
             {isLiked ? (
               <FavoriteIcon className="text-red-500" />
