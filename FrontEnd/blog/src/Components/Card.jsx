@@ -1,8 +1,33 @@
-import React from 'react';
+import React, { useEffect, useState } from 'react';
 import AllButton from './AllButton';
 import FavoriteBorderIcon from '@mui/icons-material/FavoriteBorder';
+import { useNavigate } from 'react-router-dom';
+import axios from 'axios';
 
-const Card = ({ title, description, image, author, count }) => {
+const Card = ({ title, description, image, author, blogId, user }) => {
+  const [likes, setLikes] = useState(0)
+  const [isLiked, setIsLiked] = useState(false)
+  const navigate = useNavigate();
+
+  const handleLikes = async () => {
+    if (!user) {
+      navigate("/login");
+      return;
+    }
+
+    try {
+      const { data } = await axios.put(`http://localhost:5000/api/blogs/like/${blogId}`, {}, {
+        headers: {
+          Authorization: `Bearer ${user.token}`,
+        },
+      });
+      setLikes(data.likes);
+      setIsLiked(data.isLiked);
+    } catch (error) {
+      console.error("Error updating like:", error);
+    }
+  };
+
   return (
     <div className="w-[320px] h-[350px] border-2 rounded-lg shadow-lg flex flex-col bg-white md:w-60 lg:w-60 sm:w-70">
 
@@ -16,9 +41,13 @@ const Card = ({ title, description, image, author, count }) => {
 
         <div className="flex items-center justify-between text-gray-700 mt-auto">
           <h3 className="font-medium text-sm">{author}</h3>
-          <div className="flex items-center gap-1">
-            <FavoriteBorderIcon className="text-red-500" />
-            <h3 className="text-sm">{count}</h3>
+          <div className="flex items-center gap-1" onClick={handleLikes}>
+            {isLiked ? (
+              <FavoriteIcon className="text-red-500" />
+            ) : (
+              <FavoriteBorderIcon className="text-red-500" />
+            )}
+            <h3 className="text-sm">{likes}</h3>
           </div>
         </div>
 
@@ -26,7 +55,7 @@ const Card = ({ title, description, image, author, count }) => {
           <AllButton variant="contained" name="Read More" />
         </div>
       </div>
-      
+
     </div>
   );
 };

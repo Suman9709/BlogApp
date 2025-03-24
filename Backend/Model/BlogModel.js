@@ -1,12 +1,10 @@
 import mongoose, { Schema } from "mongoose";
 
 const blogSchema = new Schema({
-
     image: {
-        type: String, 
+        type: String,
         required: true,
     },
-
     title: {
         type: String,
         required: true,
@@ -15,18 +13,17 @@ const blogSchema = new Schema({
         type: String,
         required: true,
     },
-    author: {
+    authorName: {  
         type: String,
         required: true,
     },
+    blogLike: [
+        {
+            type: mongoose.Schema.Types.ObjectId,
+            ref: "User",
+        },
+    ],
+}, { timestamps: true });
 
-    blogLike: {
-        type: Number,
-    },
-
-
-}, { timestamps: true })
-
-const Blog = mongoose.model("Blog", blogSchema)
-
+const Blog = mongoose.model("Blog", blogSchema);
 export default Blog;

@@ -5,10 +5,13 @@ import LoginPage from './Components/LoginPage';
 import SignUpPage from './Components/SignUpPage';
 import Writer from './Components/Writer';
 import OwnerPage from './Components/OwnerPage';
+import Navbar from './Components/Navbar';
+import Footer from './Components/Footer';
 
 const App = () => {
   return (
     <Router>
+      <Navbar/>
       <Routes>
         <Route path="/" element={<LandingPage />} />
         <Route path="/login" element={<LoginPage />} />
@@ -16,6 +19,7 @@ const App = () => {
         <Route path="/writer" element={<Writer />} />
         <Route path="/ownerpage" element={<OwnerPage />} />
       </Routes>
+      <Footer/>
     </Router>
   );
 };

@@ -14,58 +14,32 @@ const Navbar = () => {
   const navigate = useNavigate();
 
   useEffect(() => {
-    // Load authentication status and user details from localStorage
-    const storedUser = JSON.parse(localStorage.getItem("user"));
-    const authStatus = localStorage.getItem("isAuthenticated") === "true";
+    const checkAuthStatus = () => {
+      const token = localStorage.getItem("token");
+      if (token) {
+        setIsAuthenticated(true);
+        setUser(JSON.parse(localStorage.getItem("user")));
+      } else {
+        setIsAuthenticated(false);
+      }
+    };
 
-    setUser(storedUser);
-    setIsAuthenticated(authStatus);
+    checkAuthStatus();
+
   }, []);
 
-  const handleLogout = async () => {
-    if (!isAuthenticated) {
-      alert("You are already logged out!");
-      return;
-    }
+  const handleLogout = () => {
+    localStorage.removeItem("token");
+    localStorage.removeItem("user");
+    localStorage.setItem("isAuthenticated", "false");
 
-    try {
-      const token = localStorage.getItem("token");
+    setUser(null);
+    setIsAuthenticated(false);
+    setIsDropdownOpen(false);
 
-      if (!token) {
-        alert("You are not authenticated!");
-        return;
-      }
-
-      const response = await fetch("http://localhost:5000/api/blogs/logout", {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-          Authorization: `Bearer ${token}`,
-        },
-      });
-
-      const data = await response.json();
-
-      if (response.ok) {
-        // Clear stored user data
-        localStorage.removeItem("token");
-        localStorage.removeItem("user");
-        localStorage.setItem("isAuthenticated", "false");
-
-        setUser(null);
-        setIsAuthenticated(false);
-        setIsDropdownOpen(false);
-
-        alert("Logout successful");
-        navigate("/");
-      } else {
-        alert(data.message || "Logout failed. Please try again.");
-      }
-    } catch (error) {
-      console.error("Logout Error:", error);
-      alert("An error occurred. Please try again.");
-    }
+    navigate("/login");
   };
+
 
   return (
     <nav className="bg-white shadow-md fixed z-10 top-0 w-full">
