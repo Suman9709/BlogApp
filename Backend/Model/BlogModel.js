@@ -17,6 +17,11 @@ const blogSchema = new Schema({
         type: String,
         required: true,
     },
+    authorId: {  
+        type: mongoose.Schema.Types.ObjectId,
+        ref: "User", // Linking to User Model
+        required: true,
+    },
     blogLike: [
         {
             type: mongoose.Schema.Types.ObjectId,

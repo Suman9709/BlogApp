@@ -6,6 +6,12 @@ export const registerUser = async (req, res) => {
     try {
         const { name, username, password } = req.body
 
+
+        // validate all inputs
+
+        if (!name || !username || !password) {
+            return res.status(400).json({ message: "All fields are required" })
+        }
         //check for existing user
 
         const existingUser = await User.findOne({ username });
@@ -25,12 +31,17 @@ export const registerUser = async (req, res) => {
 
 
         //generate AccessToken
-        const token = newUser.generateAccessToken();
-        console.log("token:", token);
+        const accessToken = newUser.generateAccessToken();
+        const refreshToken = newUser.generateRefreshToken();
+        console.log("Access token:", accessToken);
+        console.log("refresh token:", refreshToken);
 
         res.status(201).json({
             message: "User Registered Successfully",
-            token,
+            token: {
+                accessToken,
+                refreshToken
+            },
             user: {
                 id: newUser._id,
                 name: newUser.name,
@@ -54,6 +65,7 @@ export const loginUser = async (req, res) => {
 
         const { username, password } = req.body
 
+        //validate field
         if (!username || !password) {
             res.status(401).json({ message: "Please enter username and password" })
         }
@@ -61,24 +73,29 @@ export const loginUser = async (req, res) => {
         const user = await User.findOne({ username });
         //check user
         if (!user) {
-            return res.status(401).json({ message: "Invalid Credentials" })
+            return res.status(401).json({ message: "Invalid Credentials username is not register" })
         }
-        console.log("user: ", user);
+        console.log("user found: ", user);
 
         //password match
 
-        const match = await user.isPasswordCorrect(password)
+        const isPasswordMatch = await user.isPasswordCorrect(password)
 
-        if (!match) {
-            return res.status(401).json({ message: "Invalid credentials" })
+        if (!isPasswordMatch) {
+            return res.status(401).json({ message: "Invalid credentials password si not correct" })
         }
 
-        const token = user.generateAccessToken();
-        console.log(token)
+        const accessToken = user.generateAccessToken();
+        const refreshToken = user.generateRefreshToken();
+        console.log("Access Token", accessToken)
+        console.log("Refresh Token", refreshToken)
 
         res.status(200).json({
             message: "Login successfully",
-            token,
+            token: {
+                accessToken,
+                refreshToken
+            },
             user: {
                 id: user._id,
                 name: user.name,
@@ -92,33 +109,13 @@ export const loginUser = async (req, res) => {
 }
 
 //logout
-export const logout = async (req, res) => {
+export const logoutUser = async (req, res) => {
     try {
-        const authHeader = req.headers["authorization"];
-        if (!authHeader || !authHeader.startsWith("Bearer ")) {
-            return res.status(403).json({ message: "Access Denied: No Token Provided" });
-        }
+        res.clearCookie("accessToken", { httpOnly: true, secure: true, sameSite: "None" });
 
-        const token = authHeader.split(" ")[1];
-
-        if (!token) {
-            return res.status(403).json({ message: "Access Denied: No Token Provided" });
-        }
-        const decoded = jwt.verify(token, process.env.JWT_ACCESS_TOKEN_SECRET);
-
-        const user = await User.findById(decoded._id);
-
-        if (!user) {
-            return res.status(404).json({ message: "user not found" });
-        }
-
-        user.refreshToken = null;
-        await user.save();
-
-        res.status(200).json({ message: "Loggedout successfully" })
+        return res.status(200).json({ message: "Logout successful" });
     } catch (error) {
-        console.error("Logout error:", error);
-        res.status(401).json({ message: "Invalid or expired token", error });
+        res.status(500).json({ message: "Logout failed", error: error.message });
     }
 };
 
