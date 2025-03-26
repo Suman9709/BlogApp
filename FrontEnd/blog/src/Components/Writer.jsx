@@ -30,7 +30,6 @@ const Writer = () => {
       alert("Fill all fields and upload an image");
       return;
     }
-
     // Create FormData and append fields
     const formData = new FormData();
     formData.append('title', title);
@@ -38,17 +37,16 @@ const Writer = () => {
     formData.append('authorName', authorName);
     formData.append('image', image);
 
-    const token = localStorage.getItem("token");
+    const token = JSON.parse(localStorage.getItem("token"));
     if (!token) {
       alert("User not authenticated. Please log in.");
       navigate("/login");
       return;
     }
-
     try {
       const response = await axios.post("http://localhost:5000/api/blogs/createblog", formData, {
         headers: {
-          "Authorization": `Bearer ${token}`,
+          "Authorization": `Bearer ${token.accessToken}`,
           // "Content-Type": "multipart/form-data",
         },
       });

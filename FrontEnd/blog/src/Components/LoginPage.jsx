@@ -6,86 +6,35 @@ import AllButton from './AllButton';
 const LoginPage = () => {
   const [username, setUsername] = useState('');
   const [password, setPassword] = useState('');
-  const [error, setError] = useState('');
+
   const navigate = useNavigate();
 
   const handleLogin = async (e) => {
     e.preventDefault();
-    // const storeUser = JSON.parse(localStorage.getItem('user'));
-
-    // if (storeUser && storeUser.username === username && storeUser.password === password) {
-    //   localStorage.setItem("isAuthenticated", "true")
-    //   alert("Login successfull")
-    //   navigate("/")
-    // }
-    // else {
-    //   alert("Invalid username or password");
-    // }
-
-    setError(" ")
     try {
       const response = await axios.post("http://localhost:5000/api/blogs/login", {
         username, password
       });
-      const { token, user } = response.data;
-      localStorage.setItem("token", token); // ✅ Store token correctly
-      localStorage.setItem("user", JSON.stringify(user)); // ✅ Store user info as string
+
+      // const { token, user } = response.data.token;
+      // console.log(typeof response.data.token);
+      const token = response.data.token;
+      // console.log(typeof token);
+      const user = response.data.user;
+
+      localStorage.setItem("token", JSON.stringify(token));
+      localStorage.setItem("user", JSON.stringify(user));
       localStorage.setItem("isAuthenticated", "true");
+
       alert("Login successful");
       navigate('/');
-
     } catch (error) {
-      console.error('Login error', error.response?.data?.message)
-      setError(error.response?.data?.message || 'Login failed');
+      alert(error.response?.data?.message || 'Login failed');
     }
-  }
-
-//   const handleLogin = async (e) => {
-//     e.preventDefault();
-//     setError("");
-
-//     try {
-//         const response = await axios.post("http://localhost:5000/api/blogs/login", {
-//             username,
-//             password
-//         });
-
-//         const { token, user } = response.data;
-
-//         if (token && user) {
-//             // Store token and user details in localStorage
-//             localStorage.setItem("token", token);
-//             localStorage.setItem("user", JSON.stringify(user));
-//             localStorage.setItem("isAuthenticated", "true");
-
-//             alert("Login successful");
-//             navigate('/');
-//         } else {
-//             throw new Error("Invalid login response");
-//         }
-
-//     } catch (error) {
-//         console.error('Login error:', error.response?.data?.message || error.message);
-//         setError(error.response?.data?.message || 'Login failed');
-//     }
-// };
-
-// Retrieving the token from localStorage when needed
-// const getToken = () => {
-//     return localStorage.getItem("token");
-// };
-
-// // Retrieving user data when needed
-// const getUser = () => {
-//     const user = localStorage.getItem("user");
-//     return user ? JSON.parse(user) : null;
-// };
-
-
-
+  };
 
   return (
-    <div className="min-h-screen flex items-center justify-center bg-gray-100">
+    <div className=" w-screen overflow-hidden min-h-screen flex items-center justify-center bg-gray-100">
       <div className="bg-white p-8 rounded-xl shadow-lg w-full max-w-md">
         <h2 className="text-2xl font-bold text-center text-gray-900">
           Login To BlogApp
