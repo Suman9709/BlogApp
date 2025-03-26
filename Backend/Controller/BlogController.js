@@ -15,7 +15,7 @@ export const createBlog = async (req, res) => {
         const newBlog = new Blog({
             title,
             description,
-            authorName, 
+            authorName,
             authorId: req.user._id,
             blogLike: [],
             image: imageUrl,
@@ -43,31 +43,6 @@ export const getAllBlogs = async (req, res) => {
     }
 };
 
-// export const ToggleLikes = async () => {
-//     const { id } = req.params;
-//     const userId = req.user.id;
-
-//     try {
-//         const blog = await Blog.findById(id)
-//         if (!blog) {
-//             return res.status(404).josn({ message: "Blog not found" })
-//         }
-
-//         const index = blog.blogLike.indexOf(userId)
-//         if (index === -1) {
-//             blog.blogLike.push(userId);
-//         }
-//         else {
-//             blog.blogLike.splice(isSecureContext, 1)
-//         }
-//         await blog.save()
-//         res.status(200).json({ message: "Like status updated", likes: blog.blogLike.length })
-//     } catch (error) {
-//         res.status(500).json({ message: "Error updating like", error })
-//     }
-// }
-
-
 export const getMyBlog = async (req, res) => {
     try {
         if (!req.user) {
@@ -89,3 +64,27 @@ export const getMyBlog = async (req, res) => {
         res.status(500).json({ message: "Server error", error });
     }
 };
+
+export const deleteBlog = async (req, res) => {
+
+    try {
+        const { id } = req.params;
+
+        const blog = await Blog.findById(id);
+
+        if (!blog) {
+            return res.status(404).json({ message: "Blog not found" })
+        }
+
+
+        if(blog.authorId.toString() !== req.user._id.toString()){
+            return res.status(403).json({message:"Unauthorized to delete this blog"});
+        }
+        await Blog.findByIdAndDelete(id);
+
+        res.status(200).json({ message: "Blog deleted successfully" })
+    } catch (error) {
+        res.status(500).json({ message: "Error in deleting blog", error })
+    }
+}
+
