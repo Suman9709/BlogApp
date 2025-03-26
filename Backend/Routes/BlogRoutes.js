@@ -1,6 +1,6 @@
 import express from 'express'
 // import cloudinary from '../Config/cloudinaryfile.js'
-import {createBlog, deleteBlog, getAllBlogs, getMyBlog} from '../Controller/BlogController.js'
+import {createBlog, deleteBlog, getAllBlogs, getBlogById, getMyBlog, updateBlog} from '../Controller/BlogController.js'
 import { registerUser, loginUser, logoutUser } from '../Controller/userController.js'
 import {upload} from '../Config/cloudinary.js'
 import verifyJWT from '../MiddleWare/authMiddleware.js'
@@ -15,5 +15,7 @@ router.get('/allblogs',getAllBlogs)
 // router.put('/like/:id', verifyJWT, ToggleLikes)
 router.get("/myblog", verifyJWT, getMyBlog)
 router.delete("/deleteBlog/:id", verifyJWT, deleteBlog)
+router.put("/updateBlog/:id", verifyJWT,upload.single("image"), updateBlog)
+router.get("/getBlogById/:id", getBlogById)
 
 export default router
