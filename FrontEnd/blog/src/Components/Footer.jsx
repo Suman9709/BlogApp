@@ -5,7 +5,7 @@ import linkedin from "../Components/ImgAssets/linkedin.svg"
 
 const Footer = () => {
     return (
-        <div className='w-full flex flex-col justify-between items-center h-36 p-4 text-black z-10 bg-white shadow-2xl'>
+        <div className='w-full flex flex-col justify-between items-center h-36 p-4 text-black z-10 bg-white shadow-2xl absolute'>
 
             <div className='flex justify-between w-full'>
                 <div>

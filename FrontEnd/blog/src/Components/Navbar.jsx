@@ -31,7 +31,6 @@ const Navbar = () => {
     // Remove authentication data on logout
     localStorage.removeItem("token");
     localStorage.removeItem("user");
-
     setIsAuthenticated(false);
     setUser(null);
     setIsDropdownOpen(false);

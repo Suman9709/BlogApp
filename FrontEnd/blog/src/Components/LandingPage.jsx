@@ -29,7 +29,7 @@ const LandingPage = () => {
   }, []);
 
   return (
-    <div className="w-full min-h-screen flex flex-col items-center">
+    <div className="w-full min-h-screen flex flex-col items-center ">
       {/* Title */}
       <div className="w-full text-center mt-40">
         <h1 className="text-3xl font-semibold">ExpressInk</h1>

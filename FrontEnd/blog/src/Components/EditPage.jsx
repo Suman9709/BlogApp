@@ -66,7 +66,7 @@ const EditPage = () => {
   };
 
   return (
-    <div className="flex flex-col items-center min-h-screen bg-gray-100 py-10">
+    <div className="flex flex-col items-center min-h-screen bg-gray-100 py-10 overflow-y-auto">
       <h1 className="text-2xl font-bold mb-4">Edit Blog</h1>
       <div className="bg-white p-6 rounded-lg shadow-md w-full max-w-md">
         <label className="block mb-2 font-semibold">Title:</label>

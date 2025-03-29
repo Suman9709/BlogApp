@@ -8,12 +8,16 @@ import OwnerPage from './Components/OwnerPage';
 import Navbar from './Components/Navbar';
 import Footer from './Components/Footer';
 import EditPage from './Components/EditPage';
+import ExtendedBlog from './Components/ExtendedBlog';
 
 const App = () => {
   return (
    
-    <Router>
-      <Navbar/>
+   <div className='flex flex-col justify-between h-screen'>
+     <Router>
+     <div>
+     <Navbar/>
+     </div>
       <Routes>
      
        <Route path="/" element={<LandingPage />} />
@@ -22,10 +26,14 @@ const App = () => {
         <Route path="/writer" element={<Writer />} />
         <Route path="/ownerpage" element={<OwnerPage />} />
         <Route path="/editPage" element={<EditPage />} />
+        <Route path="/blog/:id" element={<ExtendedBlog />} />
       
       </Routes>
-      <Footer/>
+    <div>
+    <Footer/>
+    </div>
     </Router>
+   </div>
  
   );
 };

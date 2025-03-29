@@ -14,7 +14,9 @@ const Card = ({ title, description, image, authorName, blogId, onEdit, onDelete,
   const handleLikes = async () => {
     // Like functionality can be added here
   };
-
+  const handleReadMore = () => {
+    navigate(`/blog/${blogId}`);
+  };
   return (
     <div className="w-[320px] h-[320px] border-2 rounded-lg shadow-lg flex flex-col bg-white md:w-60 lg:w-60 sm:w-70 group">
       
@@ -60,8 +62,8 @@ const Card = ({ title, description, image, authorName, blogId, onEdit, onDelete,
           </div>
         </div>
 
-        <div>
-          <AllButton variant="contained" name="Read More" />
+        <div onClick={ handleReadMore}>
+          <AllButton variant="contained" name="Read More"/>
         </div>
       </div>
 
