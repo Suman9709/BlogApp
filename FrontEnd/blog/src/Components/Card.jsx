@@ -20,7 +20,9 @@ const Card = ({ title, description, image, authorName, blogId, onEdit, onDelete,
       
       {/* Image with Hover Edit & Delete Buttons */}
       <div className="h-40 w-full relative">
-        <img className="h-60 w-60 object-cover rounded-t-lg" src={image} alt={title} />
+       <div>
+       <img className="h-40 w-60 object-cover rounded-t-lg" src={image} alt={title}/>
+       </div>
 
         {/* Hover Buttons (Only on Owner Page) */}
         {isWriterPage && (
@@ -32,7 +34,7 @@ const Card = ({ title, description, image, authorName, blogId, onEdit, onDelete,
               <img src={Delete} alt="Delete" className="w-6 h-6" />
             </button>
             <button 
-              onClick={() => onEdit(blogId)} 
+              onClick={() => onEdit(blogId) }  
               className="p-2 bg-blue-500 rounded-full h-10 w-10 flex justify-center items-center hover:bg-blue-700"
             >
               <img src={Edit} alt="Edit" className="w-6 h-6" />
@@ -44,7 +46,7 @@ const Card = ({ title, description, image, authorName, blogId, onEdit, onDelete,
       {/* Blog Details */}
       <div className="flex flex-col flex-grow p-3">
         <h2 className="text-lg md:text-xl font-semibold">{title}</h2>
-        <p className="text-gray-600 text-sm line-clamp-2 mt-1">{description}</p>
+        <p className="text-gray-600 text-sm line-clamp-2 taxt-sm">{description}</p>
 
         <div className="flex items-center justify-between text-gray-700 mt-auto">
           <h3 className="font-medium text-sm">{authorName}</h3>

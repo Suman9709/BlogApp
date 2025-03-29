@@ -7,6 +7,7 @@ import Writer from './Components/Writer';
 import OwnerPage from './Components/OwnerPage';
 import Navbar from './Components/Navbar';
 import Footer from './Components/Footer';
+import EditPage from './Components/EditPage';
 
 const App = () => {
   return (
@@ -20,6 +21,7 @@ const App = () => {
         <Route path="/signup" element={<SignUpPage />} />
         <Route path="/writer" element={<Writer />} />
         <Route path="/ownerpage" element={<OwnerPage />} />
+        <Route path="/editPage" element={<EditPage />} />
       
       </Routes>
       <Footer/>

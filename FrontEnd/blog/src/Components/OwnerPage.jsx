@@ -55,9 +55,9 @@ const OwnerPage = () => {
     }
   }
 
-  const handleEdit = (blogId) => {
-
-  }
+  const handleEdit = (blog) => {
+    navigate("/editPage", { state: { blog } }); // Passing blog data
+  };
   return (
     <div className="w-full min-h-screen flex flex-col items-center bg-amber-200 py-10 mt-18">
       <h1 className="text-xl font-bold mb-4">Your Blogs</h1>
@@ -66,7 +66,7 @@ const OwnerPage = () => {
         <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6 p-6 justify-items-center">
           {blogs.length > 0 ? (
             blogs.map((blog) => <Card key={blog._id} blogId={blog._id} {...blog} isWriterPage={true} onDelete={handleDelete}
-              onEdit={handleEdit} />)
+            onEdit={() => handleEdit(blog)}  />)
           ) : (
             <p className="text-center text-gray-500 text-lg">
               No blogs available.{" "}

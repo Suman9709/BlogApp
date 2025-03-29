@@ -80,11 +80,17 @@ const Navbar = () => {
               {/* Display user initials if authenticated */}
               <div
                 className="w-10 h-10 flex items-center justify-center bg-blue-500 text-white rounded-full text-lg font-bold cursor-pointer"
-                onClick={() => setIsDropdownOpen(!isDropdownOpen)}
+                onClick={() => {
+                  setIsDropdownOpen(!isDropdownOpen);
+                  window.addEventListener("click", function (event) {
+                    console.log("Window was clicked!");
+                  });
+                }
+                }
               >
                 <button>
                   {user?.name ? user.name.charAt(0).toUpperCase() : "U"}
-                  </button> {/* Ensure user exists before accessing properties */}
+                </button> {/* Ensure user exists before accessing properties */}
               </div>
 
               {/* User Dropdown Menu */}
