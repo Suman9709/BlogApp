@@ -22,7 +22,7 @@ const LoginPage = () => {
   };
 
   return (
-    <div className="w-screen overflow-hidden min-h-screen flex items-center justify-center bg-gray-100">
+    <div className=" overflow-hidden min-h-screen flex items-center justify-center bg-gray-100">
       <div className="bg-white p-8 rounded-xl shadow-lg w-full max-w-md">
         <h2 className="text-2xl font-bold text-center text-gray-900">
           Login To BlogApp

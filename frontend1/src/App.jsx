@@ -9,21 +9,27 @@ import CreateBlog from "./Components/CreateBlog";
 import ProfilePage from "./Components/ProfilePage";
 import EditPage from "./Components/EditPage";
 import Footer from "./Components/Footer";
+import ExtendedBlog from "./Components/ExtendedBlog";
 
 const App = () => {
   return (
     <BlogContextProvider>
       <BrowserRouter>
-        <Navbar />
-        <Routes>
-          <Route path="/" element={<MainPage />} />
-          <Route path="/signup" element={<SignUpPage />} />
-          <Route path="/login" element={<LoginPage />} />
-          <Route path="/writer" element={<CreateBlog />} />
-          <Route path="/ownerpage" element={<ProfilePage />} />
-          <Route path="editPage/:id" element={<EditPage/>} />
-        </Routes>
-        <Footer/>
+        <div className="min-h-screen flex flex-col justify-between">
+          <Navbar />
+          <main className="">
+            <Routes>
+              <Route path="/" element={<MainPage />} />
+              <Route path="/signup" element={<SignUpPage />} />
+              <Route path="/login" element={<LoginPage />} />
+              <Route path="/writer" element={<CreateBlog />} />
+              <Route path="/ownerpage" element={<ProfilePage />} />
+              <Route path="editPage/:id" element={<EditPage />} />
+              <Route path="/blog/:id" element={<ExtendedBlog />} />
+            </Routes>
+          </main>
+          <Footer />
+        </div>
       </BrowserRouter>
     </BlogContextProvider>
   );

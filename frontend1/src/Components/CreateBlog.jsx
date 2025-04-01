@@ -10,7 +10,7 @@ const CreateBlog = () => {
   const [authorName, setAuthorName] = useState('');
   const navigate = useNavigate();
 
-  const { blogcreate } = useContext(BlogContext); // Use context
+  const { blogcreate } = useContext(BlogContext);
 
   useEffect(() => {
     const token = localStorage.getItem("token");
@@ -40,28 +40,24 @@ const CreateBlog = () => {
     formData.append('image', image);
 
     try {
-      await blogcreate(formData); 
+      await blogcreate(formData);
       alert("Blog uploaded successfully");
-      navigate("/"); 
+      navigate("/");
     } catch (error) {
-      alert("Failed to upload blog: " + error.message); 
+      alert("Failed to upload blog: " + error.message);
     }
   };
 
   return (
-    <div className="flex w-screen h-screen justify-center items-center bg-gray-100 px-4">
-      <div className="bg-white p-6 rounded-lg shadow-lg w-full max-w-lg">
+    <div className="min-h-screen flex flex-col justify-center items-center bg-gray-100 px-4">
+      <div className="bg-white p-6 rounded-lg shadow-lg w-full max-w-lg mt-24  m-6">
         <h2 className="text-cyan-600 text-3xl font-semibold text-center">
           Write Your Blog Post
         </h2>
 
         <div className="mt-4 flex flex-col items-center">
           {preview ? (
-            <img
-              src={preview}
-              alt="Blog Preview"
-              className="w-full h-42 object-cover rounded-lg shadow-md"
-            />
+            <img src={preview} alt="Blog Preview" className="w-full h-48 object-cover rounded-lg shadow-md" />
           ) : (
             <div className="w-full h-48 flex items-center justify-center border-2 border-dashed border-gray-400 rounded-lg">
               <p className="text-gray-500">No image selected</p>
@@ -71,7 +67,7 @@ const CreateBlog = () => {
             type="file"
             accept="image/*"
             onChange={handleImageUpload}
-            className="mt-2 text-sm text-gray-700 border-1 p-1 rounded-lg"
+            className="mt-2 text-sm text-gray-700 border p-2 rounded-lg w-full"
           />
         </div>
 

@@ -16,8 +16,10 @@ const Navbar = () => {
 
   const handleLogout = async () => {
     const response = await logout();
+   
     if (response.success) {
       setIsDropdownOpen(false);
+      navigate("/")
     } else {
       console.error("Logout failed", response.message);
     }
