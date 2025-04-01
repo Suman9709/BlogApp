@@ -12,6 +12,8 @@ const BlogContext = createContext({
     blogcreate:()=>{},
     getallBlogs:()=>{},
     ownBlogs:()=>{},
+    removeBlog:()=>{},
+    editBlog:()=>{},
 });
 
 export default BlogContext

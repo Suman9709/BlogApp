@@ -41,13 +41,8 @@ export const loginUser = async (username, password) => {
 };
 
 
-export const logoutUser = async () => {
+export const logoutUser = async (token) => {
     try {
-        const token = localStorage.getItem("token");
-        if (!token) {
-            throw new Error("No valid token found");
-        }
-
         const response = await axios.post(`${API_URL}/logout`, {}, {
             headers: {
                 "Authorization": `Bearer ${token}`
@@ -71,38 +66,69 @@ export const createBlog = async (formData, token) => {
         const response = await axios.post(`${API_URL}/createblog`, formData, {
             headers: {
                 "Authorization": `Bearer ${token}`,
+                "Content-Type": "multipart/form-data",
             }
         });
-
-      return response.data
+        console.log("Blog upload success:", response.data);
+        return response.data
     } catch (error) {
         console.error("Error in uploading blog", error.response?.data || error.message);
         throw new Error(error.response?.data?.message || "Failed to upload blog");
     }
 };
 
-export const allBlog = async()=>{
+export const allBlog = async () => {
     try {
         const response = await axios.get(`${API_URL}/allblogs`);
-        console.log(response.data);
+        // console.log(response.data);
         return response.data;
     } catch (error) {
         console.error("error in fetching blogs", error.response?.data)
     }
 };
 
-export const personalBlog = async(token)=>{
+export const personalBlog = async (token) => {
     try {
-        const response = await axios.get(`${API_URL}/myblog`,{
-            headers:{
-                Authorization:`Bearer ${token}`
+        const response = await axios.get(`${API_URL}/myblog`, {
+            headers: {
+                Authorization: `Bearer ${token}`
             },
-            
-            
+
+
         })
         console.log("personal blog", response.data);
         return response.data;
     } catch (error) {
-        console.error("Error fetching blogs:",error)
+        console.error("Error fetching blogs:", error)
+    }
+}
+
+
+export const deleteBlog = async (blogId, token) => {
+
+    try {
+        const response = await axios.delete(`${API_URL}/deleteBlog/${blogId}`, {
+            headers: {
+                Authorization: `Bearer ${token}`,
+            }
+        });
+        return response.data;
+    } catch (error) {
+        console.error("Failed to delete blog", error)
+    }
+}
+
+
+export const editblog = async (formData, blogId, token) => {
+    try {
+        const response = await axios.put(`${API_URL}/updateBlog/${blogId}`, formData, {
+            headers: {
+                "Authorization": `Bearer ${token}`,
+                "Content-Type": "multipart/form-data",
+            }
+        })
+        return response.data;
+    } catch (error) {
+        console.error("Error in editing the blog", error.response?.data || error.message)
     }
 }

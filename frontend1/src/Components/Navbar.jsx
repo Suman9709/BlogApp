@@ -17,14 +17,11 @@ const Navbar = () => {
   const handleLogout = async () => {
     const response = await logout();
     if (response.success) {
-        setIsDropdownOpen(false);
+      setIsDropdownOpen(false);
     } else {
-        console.error("Logout failed", response.message);
+      console.error("Logout failed", response.message);
     }
-};
-
-  
-
+  };
 
   return (
     <nav className="bg-white shadow-md fixed z-10 top-0 w-full">

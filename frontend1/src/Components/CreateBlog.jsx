@@ -39,19 +39,12 @@ const CreateBlog = () => {
     formData.append('authorName', authorName);
     formData.append('image', image);
 
-    const token = JSON.parse(localStorage.getItem("token"));
-    if (!token) {
-      alert("User not authenticated. Please log in.");
-      navigate("/login");
-      return;
-    }
-
     try {
-      await blogcreate(formData); // Call blogcreate from context
+      await blogcreate(formData); 
       alert("Blog uploaded successfully");
-      navigate("/"); // Navigate to the homepage or another page
+      navigate("/"); 
     } catch (error) {
-      alert("Failed to upload blog: " + error.message); // Handle error from blogcreate
+      alert("Failed to upload blog: " + error.message); 
     }
   };
 

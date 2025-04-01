@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from "react";
 
 import BlogContext from "./Blogcontext";
-import { allBlog, createBlog, loginUser, logoutUser, personalBlog, signUpUser, } from "../Services/Api";
+import { allBlog, createBlog, deleteBlog, editblog, loginUser, logoutUser, personalBlog, signUpUser, } from "../Services/Api";
 
 const BlogContextProvider = ({ children }) => {
 
@@ -51,21 +51,40 @@ const BlogContextProvider = ({ children }) => {
         }
     };
 
+   
     const logout = async () => {
+        const token = localStorage.getItem("token");
+        console.log("Token before logout:", token);
+    
+        if (!token) {
+            console.warn("No valid token found, clearing storage anyway.");
+            
+            // Clear storage even if no token exists
+            setToken(null);
+            setUser(null);
+            setIsAuthenticated(false);
+            localStorage.removeItem("token");
+            localStorage.removeItem("user");
+            localStorage.removeItem("isAuthenticated");
+    
+            return { success: true, message: "No active session" };
+        }
+    
         try {
-            const response = await logoutUser(); // Call API logout
-
+            const response = await logoutUser(token);
+    
+            // Clear the client-side state and localStorage
+            setToken(null);
+            setUser(null);
+            setIsAuthenticated(false);
+    
+            localStorage.removeItem("token");
+            localStorage.removeItem("user");
+            localStorage.removeItem("isAuthenticated");
+    
             if (response.success) {
-                // Clear the client-side state and localStorage
-                setToken(null);
-                setUser(null);
-                setIsAuthenticated(false);
-
-                localStorage.removeItem("token");
-                localStorage.removeItem("user");
-                localStorage.removeItem("isAuthenticated");
-
                 console.log("Logout successful!");
+                navigate("/login"); 
                 return { success: true, message: "Logout successful" };
             } else {
                 console.error("Logout failed:", response.message);
@@ -76,10 +95,14 @@ const BlogContextProvider = ({ children }) => {
             return { success: false, message: error.message || "Logout failed" };
         }
     };
-
-
-
+    
     const blogcreate = async (formData) => {
+        const token = JSON.parse(localStorage.getItem("token"))
+        if (!token) {
+            console.log("no token found")
+            return
+        }
+
         try {
             const response = await createBlog(formData, token)
 
@@ -117,11 +140,61 @@ const BlogContextProvider = ({ children }) => {
         }
         try {
             const response = await personalBlog(token);
-            setBlogs(response.blogs || [])
+            if (response && response.blogs) {
+                setBlogs(response.blogs);
+            } else {
+                console.error("No blogs data found in response", response);
+                setBlogs([]); // or handle accordingly
+            }
         } catch (error) {
             console.error("failed to fetch blogs", error)
         }
     }
+
+    const removeBlog = async (blogId) => {
+        const token = JSON.parse(localStorage.getItem('token'));
+        if (!token) {
+            console.log('No token found');
+            return;
+        }
+
+        try {
+            const response = await deleteBlog(blogId, token);
+
+            if (response && response.success) {
+                setBlogs((prevBlogs) => prevBlogs.filter((blog) => blog._id !== blogId));
+            }
+        } catch (error) {
+
+            console.error('Error while deleting blog', error);
+        }
+    };
+
+    const editBlog = async (blogId, updatedData) => {
+        const token = JSON.parse(localStorage.getItem("token")); // Get token from local storage
+        if (!token) {
+            console.log("No token found");
+            return;
+        }
+
+        try {
+            const response = await editblog(updatedData, blogId, token);
+            if (response && response.success) {
+                alert("Blog updated successfully!");
+
+                setBlogs((prevBlogs) =>
+                    prevBlogs.map((blog) =>
+                        blog._id === blogId ? { ...blog, ...updatedData } : blog
+                    )
+                );
+            } else {
+                console.error("Failed to update blog:", response?.message);
+            }
+        } catch (error) {
+            console.error("Error updating blog:", error);
+            alert("Failed to update blog");
+        }
+    };
 
     const value = {
         user,
@@ -134,6 +207,8 @@ const BlogContextProvider = ({ children }) => {
         blogcreate,
         getallBlogs,
         ownBlogs,
+        removeBlog,
+        editBlog,
     };
     return (
         <BlogContext.Provider value={value} >
