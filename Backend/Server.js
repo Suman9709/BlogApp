@@ -20,7 +20,7 @@ connectDB()
 // const __dirname = path.dirname(__filename);
 
 app.use(cors({
-    origin: "http://localhost:5173",  // Allow frontend to access backend
+    origin: "http://localhost:5173" || 'https://blog-app-ten-eta-71.vercel.app/',  // Allow frontend to access backend
     methods: ["GET", "POST", "PUT", "DELETE"],
     allowedHeaders: ["Content-Type", "Authorization"]
 }));
@@ -29,6 +29,14 @@ app.use(express.json())
 app.use(express.urlencoded({ extended: true }));
 // app.use('/uploads', express.static(path.join(__dirname, 'uploads')));
 
+const API_PING_URL = 'https://blogapp-aipn.onrender.com/api/blogs/ping'
+// const API_PING_URL = 'http://localhost:5000/api/blogs/ping'
+
+setInterval(() => {
+    fetch(API_PING_URL) 
+        .then(response => console.log("Self-ping successful:", response.status))
+        .catch(error => console.error("Self-ping failed:", error));
+},  10 * 60 * 1000)
 
 app.use('/api/blogs', BlogRoutes)
 app.listen(PORT, () => {
