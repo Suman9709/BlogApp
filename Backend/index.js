@@ -20,7 +20,7 @@ connectDB()
 // const __dirname = path.dirname(__filename);
 
 app.use(cors({
-    origin: "http://localhost:5173" || 'https://blog-app-ten-eta-71.vercel.app/',  // Allow frontend to access backend
+    origin: process.env.CORS_ORGIN,  // Allow frontend to access backend
     methods: ["GET", "POST", "PUT", "DELETE"],
     allowedHeaders: ["Content-Type", "Authorization"]
 }));
