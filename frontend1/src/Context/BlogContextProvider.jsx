@@ -1,13 +1,14 @@
 import React, { useState, useEffect } from "react";
 
 import BlogContext from "./Blogcontext";
-import { createBlog, loginUser, logoutUser, signUpUser, } from "../Services/Api";
+import { allBlog, createBlog, loginUser, logoutUser, personalBlog, signUpUser, } from "../Services/Api";
 
 const BlogContextProvider = ({ children }) => {
 
     const [user, setUser] = useState(JSON.parse(localStorage.getItem("user")) || null);
     const [token, setToken] = useState(localStorage.getItem("token") || "")
     const [isAuthenticated, setIsAuthenticated] = useState(!!token)
+    const [blogs, setBlogs] = useState([]);
 
     useEffect(() => {
         setIsAuthenticated(!!token);
@@ -52,31 +53,31 @@ const BlogContextProvider = ({ children }) => {
 
     const logout = async () => {
         try {
-          const response = await logoutUser(); // Call API logout
-      
-          if (response.success) {
-            // Clear the client-side state and localStorage
-            setToken(null);
-            setUser(null);
-            setIsAuthenticated(false);
-      
-            localStorage.removeItem("token");
-            localStorage.removeItem("user");
-            localStorage.removeItem("isAuthenticated");
-      
-            console.log("Logout successful!");
-            return { success: true, message: "Logout successful" };
-          } else {
-            console.error("Logout failed:", response.message);
-            return { success: false, message: response.message };
-          }
+            const response = await logoutUser(); // Call API logout
+
+            if (response.success) {
+                // Clear the client-side state and localStorage
+                setToken(null);
+                setUser(null);
+                setIsAuthenticated(false);
+
+                localStorage.removeItem("token");
+                localStorage.removeItem("user");
+                localStorage.removeItem("isAuthenticated");
+
+                console.log("Logout successful!");
+                return { success: true, message: "Logout successful" };
+            } else {
+                console.error("Logout failed:", response.message);
+                return { success: false, message: response.message };
+            }
         } catch (error) {
-          console.error("Logout error:", error);
-          return { success: false, message: error.message || "Logout failed" };
+            console.error("Logout error:", error);
+            return { success: false, message: error.message || "Logout failed" };
         }
-      };
-      
-    
+    };
+
+
 
     const blogcreate = async (formData) => {
         try {
@@ -91,15 +92,48 @@ const BlogContextProvider = ({ children }) => {
         }
     }
 
+    const getallBlogs = async () => {
+
+        try {
+            const response = await allBlog()
+
+            if (response) {
+                setBlogs(response)
+            }
+            else {
+                console.error("Error in displaing blogs")
+            }
+        } catch (error) {
+
+        }
+    }
+
+    const ownBlogs = async () => {
+
+        const token = JSON.parse(localStorage.getItem("token"))
+        if (!token) {
+            console.log("No token found")
+            return
+        }
+        try {
+            const response = await personalBlog(token);
+            setBlogs(response.blogs || [])
+        } catch (error) {
+            console.error("failed to fetch blogs", error)
+        }
+    }
 
     const value = {
         user,
         token,
         isAuthenticated,
+        blogs,
         login,
         signUp,
         logout,
-        blogcreate
+        blogcreate,
+        getallBlogs,
+        ownBlogs,
     };
     return (
         <BlogContext.Provider value={value} >

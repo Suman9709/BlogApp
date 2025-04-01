@@ -80,3 +80,29 @@ export const createBlog = async (formData, token) => {
         throw new Error(error.response?.data?.message || "Failed to upload blog");
     }
 };
+
+export const allBlog = async()=>{
+    try {
+        const response = await axios.get(`${API_URL}/allblogs`);
+        console.log(response.data);
+        return response.data;
+    } catch (error) {
+        console.error("error in fetching blogs", error.response?.data)
+    }
+};
+
+export const personalBlog = async(token)=>{
+    try {
+        const response = await axios.get(`${API_URL}/myblog`,{
+            headers:{
+                Authorization:`Bearer ${token}`
+            },
+            
+            
+        })
+        console.log("personal blog", response.data);
+        return response.data;
+    } catch (error) {
+        console.error("Error fetching blogs:",error)
+    }
+}

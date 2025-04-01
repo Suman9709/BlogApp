@@ -6,6 +6,7 @@ import LoginPage from "./Components/LoginPage";
 import SignUpPage from "./Components/SignUpPage";
 import BlogContextProvider from "./Context/BlogContextProvider";
 import CreateBlog from "./Components/CreateBlog";
+import ProfilePage from "./Components/ProfilePage";
 
 const App = () => {
   return (
@@ -17,7 +18,7 @@ const App = () => {
           <Route path="/signup" element={<SignUpPage />} />
           <Route path="/login" element={<LoginPage />} />
           <Route path="/writer" element={<CreateBlog />} />
-          
+          <Route path="/ownerpage" element={<ProfilePage />} />
         </Routes>
       </BrowserRouter>
     </BlogContextProvider>

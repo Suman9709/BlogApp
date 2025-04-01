@@ -7,37 +7,46 @@ import IconButton from '@mui/material/IconButton';
 import Typography from '@mui/material/Typography';
 import FavoriteIcon from '@mui/icons-material/Favorite';
 import { Button } from '@mui/material';
-import bloglogo from "../Components/ImgAssets/bloglogo.png"
 
-
-const BlogCard = () => {
+const BlogCard = ({ title, description, image, _id }) => {
     return (
-        <Card sx={{ maxWidth: 250 }}>
+        <Card sx={{ width: 280, height: 320, display: 'flex', flexDirection: 'column', margin: '5px' }}>
             <CardMedia
                 component="img"
-                height="194"
-                image={bloglogo}
-                alt="Paella dish"
+                sx={{
+                    height: 170,
+                    objectFit: 'cover',
+                }}
+                image={image || 'https://via.placeholder.com/250x160'} // Fallback image if none provided
+                alt={title}
             />
-            <CardContent>
-                <Typography>
-                    Title
+            <CardContent sx={{ flexGrow: 1 }}>
+                <Typography variant="h6" component="div" sx={{ fontWeight: 'bold' }}>
+                    {title}
                 </Typography>
-                <Typography variant="body2" sx={{ color: 'text.secondary' }}>
-                    This impressive paella is a perfect party dish and a fun meal to cook
-                    together with your guests.
+                <Typography
+                    variant="body2"
+                    sx={{
+                        color: 'text.secondary',
+                        overflow: 'hidden',
+                        textOverflow: 'ellipsis',
+                        display: '-webkit-box',
+                        WebkitBoxOrient: 'vertical',
+                        WebkitLineClamp: 2,
+                    }}>
+                    {description}
                 </Typography>
             </CardContent>
-            <CardActions disableSpacing>
-                <Button variant="contained" color="primary">Read more</Button>
+            <CardActions sx={{ justifyContent: 'space-between', paddingTop: 0 }}>
+                <Button variant="contained" color="primary" sx={{ fontSize: '0.75rem', padding: '6px 12px' }}>
+                    Read more
+                </Button>
                 <IconButton aria-label="add to favorites">
                     <FavoriteIcon />
                 </IconButton>
-
             </CardActions>
-
         </Card>
     );
-}
+};
 
-export default BlogCard
+export default BlogCard;
