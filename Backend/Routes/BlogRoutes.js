@@ -18,4 +18,8 @@ router.delete("/deleteBlog/:id", verifyJWT, deleteBlog)
 router.put("/updateBlog/:id", verifyJWT,upload.single("image"), updateBlog)
 router.get("/getBlogById/:id", getBlogById)
 
+router.get('/ping', (req, res) => {
+    return res.send('Server is running')
+})
+
 export default router
