@@ -8,7 +8,6 @@ import connectDB from './Config/db.js'
 // import { fileURLToPath } from 'url';
 import BlogRoutes from './Routes/BlogRoutes.js'
 
-
 const app = express();
 dotenv.config()
 
@@ -22,7 +21,8 @@ connectDB()
 app.use(cors({
     origin: process.env.CORS_ORGIN,  // Allow frontend to access backend
     methods: ["GET", "POST", "PUT", "DELETE"],
-    allowedHeaders: ["Content-Type", "Authorization"]
+    allowedHeaders: ["Content-Type", "Authorization"],
+    credentials: true ,
 }));
 
 app.use(express.json())
