@@ -1,6 +1,6 @@
 import axios from 'axios'
 
-const API_URL = "http://localhost:5000/api/blogs"
+const API_URL = "https://blogapp-aipn.onrender.com/api/blogs"
 
 export const signUpUser = async (name, username, password) => {
     try {
