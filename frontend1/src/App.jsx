@@ -8,6 +8,7 @@ import BlogContextProvider from "./Context/BlogContextProvider";
 import CreateBlog from "./Components/CreateBlog";
 import ProfilePage from "./Components/ProfilePage";
 import EditPage from "./Components/EditPage";
+import Footer from "./Components/Footer";
 
 const App = () => {
   return (
@@ -22,6 +23,7 @@ const App = () => {
           <Route path="/ownerpage" element={<ProfilePage />} />
           <Route path="editPage/:id" element={<EditPage/>} />
         </Routes>
+        <Footer/>
       </BrowserRouter>
     </BlogContextProvider>
   );
