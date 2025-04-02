@@ -96,7 +96,7 @@ export const personalBlog = async (token) => {
 
 
         })
-        console.log("personal blog", response.data);
+        // console.log("personal blog", response.data);
         return response.data;
     } catch (error) {
         console.error("Error fetching blogs:", error)

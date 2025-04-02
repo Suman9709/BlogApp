@@ -25,18 +25,22 @@ const Navbar = () => {
     }
   };
 
-  // useEffect(() => {
-  //   const handleOutside = (event) => {
-  //     if (isDropdownOpen && !event.target.closest("[ddown]")) {
-  //       setIsDropdownOpen(false)
-  //     }
-  //   };
+const toggle = (e) =>{
+    e.stopPropagation();
+    setIsDropdownOpen(!isDropdownOpen)
+}
+  useEffect(() => {
+    const handleOutside = () => {
+      if (isDropdownOpen) {
+        setIsDropdownOpen(false)
+      }
+    };
 
-  //   // if (isDropdownOpen) {
-  //     document.addEventListener("click", handleOutside)
-  //   // }
-  //   return () => { document.removeEventListener("click", handleOutside) }
-  // },[isDropdownOpen])
+    // if (isDropdownOpen) {
+      document.addEventListener("click", handleOutside)
+    // }
+    return () => { document.removeEventListener("click", handleOutside) }
+  },[isDropdownOpen])
 
   return (
     <nav className="bg-white shadow-md fixed z-10 top-0 w-full">
@@ -74,9 +78,9 @@ const Navbar = () => {
             isAuthenticated ? (
               <>
                 <div className="w-10 h-10 flex items-center justify-center bg-blue-500 text-white rounded-full text-lg font-bold cursor-pointer">
-                  <Button onClick={() => setIsDropdownOpen(!isDropdownOpen)}>
+                  <div onClick={(e) => toggle(e)}>
                     {user?.name ? user.name.charAt(0).toUpperCase() : "U"}
-                  </Button>
+                  </div>
                 </div>
 
                 {/* User Dropdown Menu */}

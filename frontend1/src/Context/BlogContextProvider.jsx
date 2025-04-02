@@ -134,7 +134,7 @@ const BlogContextProvider = ({ children }) => {
                 setBlogs(response.blogs);
             } else {
                 console.error("No blogs data found in response", response);
-                setBlogs([]); // or handle accordingly
+                setBlogs([]); 
             }
         } catch (error) {
             console.error("failed to fetch blogs", error)
