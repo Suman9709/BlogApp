@@ -1,11 +1,13 @@
 import React, { useContext, useEffect } from 'react';
 import BlogCard from './BlogCard';
 import BlogContext from '../Context/Blogcontext';
+import { Alert } from '@mui/material';
 
 const MainPage = () => {
     const { blogs, getallBlogs } = useContext(BlogContext);
     useEffect(() => {
         getallBlogs();
+        <Alert severity="success">This is a Blog fetch successfully.</Alert>
     }, []);
 
     return (
