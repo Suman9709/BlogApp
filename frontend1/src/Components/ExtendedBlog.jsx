@@ -1,12 +1,13 @@
 import React, { useContext, useEffect, useState } from "react";
 import { getBlogById } from "../Services/Api"; // Adjust path if needed
 import BlogContext from "../Context/Blogcontext";
+import { useParams } from "react-router-dom";
 
 const ExtendedBlog = () => {
   const { blogs } = useContext(BlogContext)
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState("");
-
+  const { id } = useParams();
   useEffect(() => {
     const fetchBlog = async () => {
       setLoading(true);
