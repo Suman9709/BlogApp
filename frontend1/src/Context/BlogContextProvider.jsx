@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from "react";
 
 import BlogContext from "./Blogcontext";
-import { allBlog, createBlog, deleteBlog, editblog, handleLikes, loginUser, logoutUser, personalBlog, signUpUser, } from "../Services/Api";
+import { allBlog, createBlog, deleteBlog, editblog, getBlogById, handleLikes, loginUser, logoutUser, personalBlog, signUpUser, } from "../Services/Api";
 
 const BlogContextProvider = ({ children }) => {
 
@@ -186,7 +186,7 @@ const BlogContextProvider = ({ children }) => {
         }
     };
 
-       const likeBlog = async (blogId) => {
+    const likeBlog = async (blogId) => {
         const token = JSON.parse(localStorage.getItem("token"));
         const user = JSON.parse(localStorage.getItem("user"));
         if (!token || !user) return alert("Please log in to like blogs.");
@@ -208,7 +208,21 @@ const BlogContextProvider = ({ children }) => {
         }
     };
 
-  
+    const fetchBlog = async (blogId) => {
+        try {
+            const response = await getBlogById(blogId);
+            // console.log("Fetched Blog:", response);
+    
+            if (response) {  
+                setBlogs(response); 
+            } else {
+                console.error("Error: Blog not found or response is null.");
+            }
+        } catch (error) {
+            console.error("Error fetching the readmore blog:", error.message);
+        }
+    };
+    
 
     const value = {
         user,
@@ -224,6 +238,7 @@ const BlogContextProvider = ({ children }) => {
         removeBlog,
         editBlog,
         likeBlog,
+        fetchBlog,
     };
     return (
         <BlogContext.Provider value={value} >

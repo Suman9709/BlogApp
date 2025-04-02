@@ -107,13 +107,21 @@ export const personalBlog = async (token) => {
 export const getBlogById = async (blogId) => {
     try {
         const response = await axios.get(`${API_URL}/getBlogById/${blogId}`);
-        // console.log("Fetched Blog:", response.data);
-        return response.data.blog; 
+        // console.log("Full Response:", response);  
+        // console.log("Fetched Blog:", response.data);  
+
+        if (response.data && response.data.blog) {
+            return response.data.blog;
+        } else {
+            console.error("Blog not found in response:", response.data);
+            return { success: false, message: "Blog not found" };
+        }
     } catch (error) {
-        console.error("Error fetching blog:", error);
+        console.error("Error fetching blog:", error.response ? error.response.data : error.message);
         return { success: false, message: "Error fetching blog" };
     }
 };
+
 
 export const deleteBlog = async (blogId, token) => {
 
