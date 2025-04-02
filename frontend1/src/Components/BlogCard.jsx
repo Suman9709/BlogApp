@@ -19,15 +19,23 @@ const BlogCard = ({ title, description, image, _id, blogLike, authorName, onDele
     const location = useLocation();
     const isProfilePage = location.pathname === "/ownerpage";
     const { likeBlog } = useContext(BlogContext);
+    const user = JSON.parse(localStorage.getItem("user"));
+
 
     useEffect(() => {
-        const user = JSON.parse(localStorage.getItem("user"));
         if (user && blogLike.includes(user.id)) {
             setLiked(true);
         }
     }, [blogLike]);
 
     const handleLikeClick = async () => {
+        if (!user) {
+            alert("You need to log in to like a blog!");
+            navigate("/login")
+           
+            return;
+        }
+
         setLiked(prevLiked => !prevLiked);
         setLikeCount(prevCount => (liked ? prevCount - 1 : prevCount + 1));
         await likeBlog(_id);

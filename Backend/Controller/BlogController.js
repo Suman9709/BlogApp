@@ -135,7 +135,6 @@ export const getBlogById = async (req, res) => {
     }
 }
 
-import Blog from "../Model/BlogSchema.js";
 
 export const blogLikes = async (req, res) => {
     try {
