@@ -8,6 +8,7 @@ const ExtendedBlog = () => {
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState("");
   const { id } = useParams();
+
   useEffect(() => {
     const fetchBlog = async () => {
       setLoading(true);
@@ -33,7 +34,7 @@ const ExtendedBlog = () => {
     <div className="p-4 sm:p-6 bg-white sm:mt-20 flex flex-col items-center max-w-4xl mx-auto overflow-y-auto mt-20">
       {blogs?.image && (
         <img
-          src={blogs.image}
+          src={object.blogs.image}
           alt={blogs.title || "Blog Image"}
           className="w-32 h-32 sm:w-52 sm:h-52 object-cover rounded-lg shadow-lg"
         />
