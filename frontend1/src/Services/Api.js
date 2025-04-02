@@ -104,6 +104,16 @@ export const personalBlog = async (token) => {
     }
 }
 
+export const getBlogById = async (blogId) => {
+    try {
+        const response = await axios.get(`${API_URL}/getBlogById/${blogId}`);
+        // console.log("Fetched Blog:", response.data);
+        return response.data; 
+    } catch (error) {
+        console.error("Error fetching blog:", error);
+        return { success: false, message: "Error fetching blog" };
+    }
+};
 
 export const deleteBlog = async (blogId, token) => {
 

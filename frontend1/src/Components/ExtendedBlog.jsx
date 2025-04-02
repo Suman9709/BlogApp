@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from "react";
 import { useParams } from "react-router-dom";
-import axios from "axios";
+import { getBlogById } from "../api/blogService"; // Adjust path if needed
 
 const ExtendedBlog = () => {
   const { id } = useParams();
@@ -10,22 +10,23 @@ const ExtendedBlog = () => {
 
   useEffect(() => {
     const fetchBlog = async () => {
-      try {
-        const response = await axios.get(
-          `http://localhost:5000/api/blogs/getBlogById/${id}`
-        );
-        console.log(response.data);
+      setLoading(true);
+      const data = await getBlogById(id);
 
-        setBlog(response.data.blog || response.data);
-      } catch (err) {
-        setError("Error fetching blog. It may not exist.");
-      } finally {
-        setLoading(false);
+      if (data.success) {
+        setBlog(data.blog || data); 
+      } else {
+        setError(data.message || "Error fetching blog.");
       }
+
+      setLoading(false);
     };
 
     fetchBlog();
   }, [id]);
+
+  if (loading) return <p>Loading...</p>;
+  if (error) return <p className="text-red-500">{error}</p>;
 
   return (
     <div className="p-4 sm:p-6 bg-white sm:mt-20 flex flex-col items-center max-w-4xl mx-auto overflow-y-auto mt-20">
