@@ -134,3 +134,54 @@ export const getBlogById = async (req, res) => {
         res.status(500).json({ message: "Error in fetching blog", error })
     }
 }
+
+import Blog from "../Model/BlogSchema.js";
+
+export const blogLikes = async (req, res) => {
+    try {
+        const { blogId } = req.body;
+        const userId = req.user._id; 
+
+        if (!blogId) {
+            return res.status(400).json({ message: "Blog Id is required" });
+        }
+
+        // Find the blog by ID
+        const blog = await Blog.findById(blogId);
+        if (!blog) {
+            return res.status(404).json({ message: "Blog not found" });
+        }
+
+        // Check if user has already liked the blog
+        const userIndex = blog.blogLike.indexOf(userId);
+
+        if (userIndex !== -1) {
+            // Unlike the blog
+            blog.blogLike.splice(userIndex, 1);
+            await blog.save();
+            return res.status(200).json({
+                message: "You have unliked this blog!",
+                action: "unliked",
+                likesCount: blog.blogLike.length,
+                likedBy: blog.blogLike
+            });
+        } else {
+            // Like the blog
+            blog.blogLike.push(userId);
+            await blog.save();
+            return res.status(200).json({
+                message: "You have liked this blog!",
+                action: "liked",
+                likesCount: blog.blogLike.length,
+                likedBy: blog.blogLike
+            });
+        }
+    } catch (error) {
+        res.status(500).json({ message: "Server error", error: error.message });
+    }
+};
+
+
+
+
+

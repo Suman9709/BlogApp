@@ -25,10 +25,10 @@ const Navbar = () => {
     }
   };
 
-const toggle = (e) =>{
+  const toggle = (e) => {
     e.stopPropagation();
     setIsDropdownOpen(!isDropdownOpen)
-}
+  }
   useEffect(() => {
     const handleOutside = () => {
       if (isDropdownOpen) {
@@ -37,10 +37,10 @@ const toggle = (e) =>{
     };
 
     // if (isDropdownOpen) {
-      document.addEventListener("click", handleOutside)
+    document.addEventListener("click", handleOutside)
     // }
     return () => { document.removeEventListener("click", handleOutside) }
-  },[isDropdownOpen])
+  }, [isDropdownOpen])
 
   return (
     <nav className="bg-white shadow-md fixed z-10 top-0 w-full">

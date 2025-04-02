@@ -14,6 +14,7 @@ const BlogContext = createContext({
     ownBlogs:()=>{},
     removeBlog:()=>{},
     editBlog:()=>{},
+    likeBlog:()=>{},
 });
 
 export default BlogContext

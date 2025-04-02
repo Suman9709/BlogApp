@@ -28,7 +28,7 @@ const ExtendedBlog = () => {
   }, [id]);
 
   return (
-    <div className="p-4 sm:p-6 bg-white mt-10 sm:mt-20 flex flex-col items-center max-w-4xl mx-auto overflow-y-auto">
+    <div className="p-4 sm:p-6 bg-white sm:mt-20 flex flex-col items-center max-w-4xl mx-auto overflow-y-auto mt-20">
       {blog?.image && (
         <img
           src={blog.image}

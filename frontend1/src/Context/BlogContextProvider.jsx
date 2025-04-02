@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from "react";
 
 import BlogContext from "./Blogcontext";
-import { allBlog, createBlog, deleteBlog, editblog, loginUser, logoutUser, personalBlog, signUpUser, } from "../Services/Api";
+import { allBlog, createBlog, deleteBlog, editblog, handleLikes, loginUser, logoutUser, personalBlog, signUpUser, } from "../Services/Api";
 
 const BlogContextProvider = ({ children }) => {
 
@@ -51,28 +51,28 @@ const BlogContextProvider = ({ children }) => {
         }
     };
 
-   
+
     const logout = async () => {
         const token = JSON.parse(localStorage.getItem("token"));
         // console.log("Token before logout:", token);
-        
+
         if (!token) {
             console.warn("No valid token found, clearing storage anyway.");
         }
-    
+
         try {
             const response = await logoutUser(token);
             setToken(null);
             setUser(null);
             setIsAuthenticated(false);
-    
+
             localStorage.removeItem("token");
             localStorage.removeItem("user");
             localStorage.removeItem("isAuthenticated");
-    
+
             if (response.success) {
                 console.log("Logout successful!");
-                 
+
                 return { success: true, message: "Logout successful" };
             } else {
                 console.error("Logout failed:");
@@ -81,11 +81,11 @@ const BlogContextProvider = ({ children }) => {
         } catch (error) {
             console.error("Logout error:", error);
             return res.status(401).JSON({
-                error:"issue with the logout controller"
+                error: "issue with the logout controller"
             })
         }
     };
-    
+
     const blogcreate = async (formData) => {
         const token = JSON.parse(localStorage.getItem("token"))
         if (!token) {
@@ -134,7 +134,7 @@ const BlogContextProvider = ({ children }) => {
                 setBlogs(response.blogs);
             } else {
                 console.error("No blogs data found in response", response);
-                setBlogs([]); 
+                setBlogs([]);
             }
         } catch (error) {
             console.error("failed to fetch blogs", error)
@@ -186,6 +186,30 @@ const BlogContextProvider = ({ children }) => {
         }
     };
 
+       const likeBlog = async (blogId) => {
+        const token = JSON.parse(localStorage.getItem("token"));
+        const user = JSON.parse(localStorage.getItem("user"));
+        if (!token || !user) return alert("Please log in to like blogs.");
+
+        try {
+            const response = await handleLikes(blogId, token);
+
+            if (response && response.success) {
+                setBlogs(prevBlogs =>
+                    prevBlogs.map(blog =>
+                        blog._id === blogId
+                            ? { ...blog, blogLike: response.likedBy } // API returns updated likedBy array
+                            : blog
+                    )
+                );
+            }
+        } catch (error) {
+            console.error("Error in liking blog function", error);
+        }
+    };
+
+  
+
     const value = {
         user,
         token,
@@ -199,6 +223,7 @@ const BlogContextProvider = ({ children }) => {
         ownBlogs,
         removeBlog,
         editBlog,
+        likeBlog,
     };
     return (
         <BlogContext.Provider value={value} >

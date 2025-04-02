@@ -1,6 +1,7 @@
 import axios from 'axios'
 
 const API_URL = "https://blogapp-aipn.onrender.com/api/blogs"
+// const API_URL = "http://localhost:5000/api/blogs"
 
 export const signUpUser = async (name, username, password) => {
     try {
@@ -49,14 +50,14 @@ export const logoutUser = async (token) => {
             }
         });
 
-        if (response.status === 200 ||response.status === 204 && response.data.success) {
+        if (response.status === 200 || response.status === 204 && response.data.success) {
             return { success: true, message: "Logout successful" };
         } else {
-            throw new Error( "Unexpected logout response");
+            throw new Error("Unexpected logout response");
         }
     } catch (error) {
         console.error("Logout error:", error);
-        return { success: false, message:"Logout failed" };
+        return { success: false, message: "Logout failed" };
     }
 };
 
@@ -131,4 +132,23 @@ export const editblog = async (formData, blogId, token) => {
     } catch (error) {
         console.error("Error in editing the blog", error.response?.data || error.message)
     }
+}
+
+export const handleLikes = async (blogId, token) => {
+    try {
+        const response = await axios.post(`${API_URL}/likes`, { blogId }, {
+            headers: {
+                "Authorization": `Bearer ${token}`,
+                "Content-Type": "application/json"
+            }
+        })
+        console.log(response.data);
+        return response.data
+
+
+    } catch (error) {
+        console.error("Error in liking the blog", error)
+        return { success: false };
+    }
+
 }
