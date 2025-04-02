@@ -6,7 +6,7 @@ const MainPage = () => {
     const { blogs, getallBlogs } = useContext(BlogContext);
     useEffect(() => {
         getallBlogs();
-    }, [getallBlogs]);
+    }, []);
 
     return (
         <div className="flex gap-5 justify-center flex-col ">

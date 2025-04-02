@@ -53,27 +53,15 @@ const BlogContextProvider = ({ children }) => {
 
    
     const logout = async () => {
-        const token = localStorage.getItem("token");
-        console.log("Token before logout:", token);
-    
+        const token = JSON.parse(localStorage.getItem("token"));
+        // console.log("Token before logout:", token);
+        
         if (!token) {
             console.warn("No valid token found, clearing storage anyway.");
-            
-            // Clear storage even if no token exists
-            setToken(null);
-            setUser(null);
-            setIsAuthenticated(false);
-            localStorage.removeItem("token");
-            localStorage.removeItem("user");
-            localStorage.removeItem("isAuthenticated");
-    
-            return { success: true, message: "No active session" };
         }
     
         try {
             const response = await logoutUser(token);
-    
-            // Clear the client-side state and localStorage
             setToken(null);
             setUser(null);
             setIsAuthenticated(false);
@@ -84,15 +72,17 @@ const BlogContextProvider = ({ children }) => {
     
             if (response.success) {
                 console.log("Logout successful!");
-                navigate("/login"); 
+                 
                 return { success: true, message: "Logout successful" };
             } else {
-                console.error("Logout failed:", response.message);
+                console.error("Logout failed:");
                 return { success: false, message: response.message };
             }
         } catch (error) {
             console.error("Logout error:", error);
-            return { success: false, message: error.message || "Logout failed" };
+            return res.status(401).JSON({
+                error:"issue with the logout controller"
+            })
         }
     };
     

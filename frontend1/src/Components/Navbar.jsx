@@ -1,4 +1,4 @@
-import React, { useContext, useState } from "react";
+import React, { useContext, useEffect, useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import SearchIcon from "@mui/icons-material/Search";
 import MenuIcon from "@mui/icons-material/Menu";
@@ -16,7 +16,7 @@ const Navbar = () => {
 
   const handleLogout = async () => {
     const response = await logout();
-   
+
     if (response.success) {
       setIsDropdownOpen(false);
       navigate("/")
@@ -24,6 +24,19 @@ const Navbar = () => {
       console.error("Logout failed", response.message);
     }
   };
+
+  // useEffect(() => {
+  //   const handleOutside = (event) => {
+  //     if (isDropdownOpen && !event.target.closest("[ddown]")) {
+  //       setIsDropdownOpen(false)
+  //     }
+  //   };
+
+  //   // if (isDropdownOpen) {
+  //     document.addEventListener("click", handleOutside)
+  //   // }
+  //   return () => { document.removeEventListener("click", handleOutside) }
+  // },[isDropdownOpen])
 
   return (
     <nav className="bg-white shadow-md fixed z-10 top-0 w-full">

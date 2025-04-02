@@ -49,14 +49,14 @@ export const logoutUser = async (token) => {
             }
         });
 
-        if (response.status === 200 && response.data.success) {
+        if (response.status === 200 ||response.status === 204 && response.data.success) {
             return { success: true, message: "Logout successful" };
         } else {
-            throw new Error(response.data.message || "Unexpected logout response");
+            throw new Error( "Unexpected logout response");
         }
     } catch (error) {
-        console.error("Logout error:", error.response?.data?.message || error.message);
-        return { success: false, message: error.response?.data?.message || "Logout failed" };
+        console.error("Logout error:", error);
+        return { success: false, message:"Logout failed" };
     }
 };
 
